@@ -33,7 +33,7 @@ app.post('/uploadPicCat', (req, res) => {
   var randomString = '' +  Math.floor(Math.random() * 10000000)
   var randomFilename = randomString + '.' + extension
   fs.writeFileSync('images/cat/' +  randomFilename, req.body);
-  res.send(randomFilename)
+  res.send("/cat/"+randomFilename)
 })
 app.post('/uploadPicItem', (req, res) => {
   var extension = req.query.ext.split('.').pop();
@@ -47,19 +47,19 @@ app.post('/uploadPicProfile', (req, res) => {
   var randomString = '' +  Math.floor(Math.random() * 10000000)
   var randomFilename = randomString + '.' + extension
   fs.writeFileSync('images/profile/' +  randomFilename, req.body);
-  res.send(randomFilename)
+  res.send("/profile/"+randomFilename)
 })
 //////////////////
 
 app.get("/getartistdetails", (req, res) => {
-  //let reqb = JSON.parse(req.body.toString());
+  //let reqb = req.query.artistName;
   reqb = { artistName: "caro" };
 
   RESB = {
     artistName: "caro",
     bio: "I'm a cool artist",
     location: "Montreal, Canada",
-    imageURL: "mypic.jpg",
+    profPicURL: "",
     items: [
       {
         itemID: "123457",
