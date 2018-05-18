@@ -125,20 +125,6 @@ app.post("/createTransaction", (req, res) => {
     res.send(JSON.stringify(RESB));
   });
 
-  app.get("/getItemDetails", (req, res)=>{
-      let itemID = req.query.itemID;
-      //get the itemdetails for this itemID
-      let RESB = {
-        itemID: itemID,
-        name: "A pillow",
-        imageURL: "items/pillow.jpg",
-        blurb: "",
-        artistName: "clara",
-        price: ""
-      }
-      res.send(JSON.stringify(RESB))
-  });
-
   app.post("/addToCart", (req, res) => {
     //   let parsed = JSON.parse(req.body.toString());
     //   let userID = parsed.userID;
@@ -179,39 +165,6 @@ app.post("/createTransaction", (req, res) => {
 //       res.send(RESB)
 //   })
 
-  app.post("/getArtistProfile", (req, res) => {
-    let reqb = JSON.parse(req.body.toString());
-  
-    let RESB = {
-      artistName: "caro",
-      bio: "I'm a cool artist",
-      location: "Montreal, Canada",
-      profPicURL: "",
-      items: [
-        {
-          itemID: "123457",
-          name: "Awesome Embroidery",
-          price: 100,
-          artistName: "caro",
-          imageURL: "embroidery.jpg",
-          cat: "Spring",
-          blurb: "Best embroidery ever!",
-          quantity: 1
-        },
-        {
-          itemID: "123458",
-          name: "Pillow",
-          price: 100,
-          artistName: "caro",
-          imageURL: "pillow.jpg",
-          cat: "Popular",
-          blurb: "Best pillow ever!",
-          quantity: 2
-        }
-      ]
-    };
-    res.send(JSON.stringify(RESB));
-  });
 
   app.get('/getRandomItems', (req, res)=>{
       //randomize items in the backend then send back those items
