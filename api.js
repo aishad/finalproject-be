@@ -88,5 +88,22 @@ app.post("/getArtistProfile", (req, res) => {
   res.send(JSON.stringify(RESB));
 });
 
+app.get("/getItemDetails", (req, res)=>{
+  let itemID = req.query.itemID;
+  //get the itemdetails for this itemID
+  let RESB = {
+    itemID:itemID,
+    name: "A pillow",
+    imageURL: "items/pillow.jpg",
+    blurb: "",
+    artistName: "clara",
+    price: ""
+  }
+  res.send(JSON.stringify(RESB))
+  console.log("getItemDetails:", RESB)
+
+});
+
+
 
 app.listen(4000, () => console.log("Listening on port 4000!"));
