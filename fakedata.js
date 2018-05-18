@@ -24,7 +24,7 @@ let listings = [
     img1: "",
     img2: "",
     img3: "",
-    artiistName: "",
+    artistName: "",
     quantity: "",
 },
 {   id: "",
@@ -35,7 +35,7 @@ let listings = [
     img1: "",
     img2: "",
     img3: "",
-    artiistName: "",
+    artistName: "",
     quantity: ""
 }
 ]

@@ -119,5 +119,21 @@ app.post("/getOrders", (req, res) => {
   res.send(JSON.stringify(RESB));
 });
 
+app.post("/getSearchResults", (req, res)=>{
+  let reqb= JSON.parse(req.body.toString());
+//  let reqb = {searchTerm: this.props.query}
+  console.log("getResults-2", reqb);
+  RESB={
+    searchItems: [
+      { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", imageURL: 'print.jpg', cat: "Spring", blurb: "Here's my spring print", quantity: 2 },
+      { itemID: '123457', name: "Awesome Embroidery", price: 100, artistName: "caro", imageURL: 'embroidery.jpg', cat: "Spring", blurb: "Best embroidery ever!", quantity: 1 },
+      { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
+      { itemID: '123459', name: "Painting", price: 20, artistName: "jen", imageURL: 'painting.jpg', cat: "Prints", blurb: "This is a cool painting", quantity: 3 },
+      { itemID: '123450', name: "Cool Print", price: 30, artistName: "jen", imageURL: 'print.jpg', cat: "Prints", blurb: "Great print", quantity: 4 },
+  ]
+  }
+  console.log("getResults-3", RESB)
+  res.send(JSON.stringify(RESB))
+})
 
 app.listen(4000, () => console.log("Listening on port 4000!"));
