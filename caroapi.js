@@ -124,4 +124,50 @@ app.post("/createTransaction", (req, res) => {
     console.log("removeItem-3", RESB);
     res.send(JSON.stringify(RESB));
   });
+
+  app.get("/getItemDetails", (req, res)=>{
+      //let itemID = req.query.itemID;
+      //get the itemdetails for this itemID
+      let RESB = {
+        name: "A pillow",
+        imageURL: "items/pillow.jpg",
+        blurb: "",
+        artistName: "clara",
+        price: ""
+      }
+      res.send(JSON.stringify(RESB))
+  });
+
+  app.post("/addToCart", (req, res) => {
+    //   let parsed = JSON.parse(req.body.toString());
+    //   let userID = parsed.userID;
+    //   let itemID = parsed.itemID;
+    //   let quantity = parsed.quantity;
+    // using the above info, add the item in question to the user's list of cartitems, then send back userinfo
+    let RESB = {
+        id: "123",
+        firstName: "Jen",
+        lastName: "O",
+        email: "jen@email.com",
+        address: "123 Blah St.",
+        city: "Montreal",
+        province: "Quebec",
+        postalCode: "H13 1Y8",
+        country: "Canada",
+        cartItems: [
+            {
+              itemID: "123458",
+              name: "Pillow",
+              price: 100,
+              artistName: "caro",
+              imageURL: "items/pillow.jpg",
+              cat: "Popular",
+              quantity: 2,
+              quantityToBuy: 1
+            },]
+
+    }
+    res.send(RESB)
+
+  })
 app.listen(4000, () => console.log("Listening on port 4000!"));
