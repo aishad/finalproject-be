@@ -104,5 +104,20 @@ app.get("/getItemDetails", (req, res)=>{
 });
 
 
+app.post("/getOrders", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+  //let reqb = {artistName: this.props.artistName}
+  console.log("getOrders-2", reqb);
+
+  RESB = {
+    orders: [
+      { orderID: "#6789", buyerName: "Joe", itemID: ['123457','123458'], total: 100, date: "May 15, 2018", fulfilled: "fulfilled" },
+      { orderID: "#1237866", buyerName: "Joe", itemID: ['1479','123458'], total: 600, date: "May 10, 2018", fulfilled: "unfulfilled" }
+  ]
+  };
+  console.log("getOrders-3", RESB)
+  res.send(JSON.stringify(RESB));
+});
+
 
 app.listen(4000, () => console.log("Listening on port 4000!"));
