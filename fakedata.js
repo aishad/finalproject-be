@@ -1,14 +1,16 @@
 let transactions = [
 {id: "",
-email: "",
+userID: "",
 Details: [{itemID, artistName}, {itemID, artistName}],
 date: "",
+shippingInfo: {address: "", city: "", province: "", postalCode: "", country: ""}
 }
 ,
 {id: "",
-email: "",
+userID: "",
 Details: [{itemID, artistName}, {itemID, artistName}],
 date: "",
+shippingInfo: {address: "", city: "", province: "", postalCode: "", country: ""}
 }
 ]
 
