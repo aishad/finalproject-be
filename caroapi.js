@@ -172,12 +172,12 @@ app.post("/createTransaction", (req, res) => {
 
   })
 
-  app.get("/getItemsBought", (req, res) => {
-      let userID=req.query.userID;
-      //get the itemsbought for this userID via transaction database
-      let RESB = {itemsBought: ["123455", "123445"]}
-      res.send(RESB)
-  })
+//   app.get("/getItemsBought", (req, res) => {
+//       let userID=req.query.userID;
+//       //get the itemsbought for this userID via transaction database
+//       let RESB = {itemsBought: ["123455", "123445"]}
+//       res.send(RESB)
+//   })
 
   app.post("/getArtistProfile", (req, res) => {
     let reqb = JSON.parse(req.body.toString());
@@ -269,6 +269,16 @@ app.post("/createTransaction", (req, res) => {
             }
           ]
         res.send(JSON.stringify(RESB));
+  })
+
+  app.get("/getCatItems", (req, res) => {
+    let cat=req.query.cat;
+    //using the cat, go through listings database and get the corresponding items
+    let RESB=[
+    { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", imageURL: '/items/45589157_095_b.jpg', cat: "Spring" },
+    { itemID: '123457', name: "Awesome Emproidery", price: 100, artistName: "caro", imageURL: '/items/45513033_045_b10.jpg', cat: "Spring" }
+    ]
+    res.send(JSON.stringify(RESB));
   })
 
 app.listen(4000, () => console.log("Listening on port 4000!"));
