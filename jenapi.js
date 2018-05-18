@@ -90,24 +90,6 @@ app.use(express.static("images"));
     res.send("success")
   })
 
-  app.post("/getUserDetails", (req, res) => {
-    let reqb = JSON.parse(req.body.toString());
-    //   let reqb = { userID : this.props.userID }
-    //console.log("getUserDetails-2", reqb);
-  
-    let RESB = {
-      firstName: "Jennnnn",
-      lastName: "O",
-      email: "jennnnn@email.com",
-      address: "12333 Blah St.",
-      city: "Montreal",
-      province: "Quebec",
-      postalCode: "H13 1Y8",
-      country: "Canada"
-    };
-    //console.log("getUserDetails-3", RESB);
-    res.send(JSON.stringify(RESB));
-  });
 
   app.get("/getItemsBought", (req, res) => {
     let userID=req.query.userID;
