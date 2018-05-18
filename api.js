@@ -99,9 +99,8 @@ app.get("/getItemDetails", (req, res)=>{
     artistName: "clara",
     price: ""
   }
-  res.send(JSON.stringify(RESB))
   console.log("getItemDetails:", RESB)
-
+  res.send(JSON.stringify(RESB))
 });
 
 
