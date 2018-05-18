@@ -7,15 +7,6 @@ app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
 
 app.use(express.static("images"));
 
-
-  app.get("/getItemsBought", (req, res) => {
-      let userID=req.query.userID;
-      //get the itemsbought for this userID via transaction database
-      let RESB = {itemsBought: ["123455", "123445"]}
-      res.send(RESB)
-  })
-
-
   app.post("/userLogin", (req, res) => {
     // let reqb = {
     //   email: "jen@email.com",
@@ -117,6 +108,18 @@ app.use(express.static("images"));
     //console.log("getUserDetails-3", RESB);
     res.send(JSON.stringify(RESB));
   });
+
+  app.get("/getItemsBought", (req, res) => {
+    let userID=req.query.userID;
+    //get the itemsbought for this userID via transaction database
+    let RESB = {
+      itemsBought: [ 
+        { itemID: '123457', name: "Awesome Embroidery", price: 100, artistName: "caro", imageURL: 'embroidery.jpg', cat: "Spring", blurb: "Best embroidery ever!", quantity: 1 },
+        { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
+     ]
+    }
+    res.send(JSON.stringify(RESB));
+  })
 
 app.listen(4000, () => console.log("Listening on port 4000!"));
 
