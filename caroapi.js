@@ -66,12 +66,12 @@ app.post("/createTransaction", (req, res) => {
   //     // transactions
   //     cartItems : this.state.cartItems,
   //   }
-  console.log("createTransaction-2", reqb);
+  //console.log("createTransaction-2", reqb);
 
   let RESB = {
     transactionID: "12442312312"
   };
-  console.log("createTransaction-3", RESB);
+  //console.log("createTransaction-3", RESB);
   res.send(JSON.stringify(RESB));
 });
 
@@ -178,4 +178,97 @@ app.post("/createTransaction", (req, res) => {
       let RESB = {itemsBought: ["123455", "123445"]}
       res.send(RESB)
   })
+
+  app.post("/getArtistProfile", (req, res) => {
+    let reqb = JSON.parse(req.body.toString());
+  
+    let RESB = {
+      artistName: "caro",
+      bio: "I'm a cool artist",
+      location: "Montreal, Canada",
+      profPicURL: "",
+      items: [
+        {
+          itemID: "123457",
+          name: "Awesome Embroidery",
+          price: 100,
+          artistName: "caro",
+          imageURL: "embroidery.jpg",
+          cat: "Spring",
+          blurb: "Best embroidery ever!",
+          quantity: 1
+        },
+        {
+          itemID: "123458",
+          name: "Pillow",
+          price: 100,
+          artistName: "caro",
+          imageURL: "pillow.jpg",
+          cat: "Popular",
+          blurb: "Best pillow ever!",
+          quantity: 2
+        }
+      ]
+    };
+    res.send(JSON.stringify(RESB));
+  });
+
+  app.get('/getRandomItems', (req, res)=>{
+      //randomize items in the backend then send back those items
+      let RESB =
+        [
+            {
+              itemID: "123456",
+              name: "Spring Print",
+              price: 50,
+              artistName: "aisha",
+              imageURL: "/items/43581461_041_b2.jpg",
+              cat: "Spring",
+              blurb: "Here's my spring print",
+              quantity: 2
+            },
+            {
+              itemID: "123457",
+              name: "Awesome Embroidery",
+              price: 100,
+              artistName: "caro",
+              imageURL: "/items/44313724_104_b.jpg",
+              cat: "Spring",
+              blurb: "Best embroidery ever!",
+              quantity: 1
+            },
+            {
+              itemID: "123458",
+              name: "Pillow",
+              price: 100,
+              artistName: "caro",
+              imageURL: "/items/44622173_045_b.jpg",
+              cat: "Popular",
+              blurb: "Check out my pillow",
+              quantity: 1
+            },
+            {
+              itemID: "123459",
+              name: "Painting",
+              price: 20,
+              artistName: "jen",
+              imageURL: "/items/45513033_045_b10.jpg",
+              cat: "Prints",
+              blurb: "This is a cool painting",
+              quantity: 3
+            },
+            {
+              itemID: "123450",
+              name: "Cool Print",
+              price: 30,
+              artistName: "jen",
+              imageURL: "/items/45589157_095_b.jpg",
+              cat: "Prints",
+              blurb: "Great print",
+              quantity: 4
+            }
+          ]
+        res.send(JSON.stringify(RESB));
+  })
+
 app.listen(4000, () => console.log("Listening on port 4000!"));
