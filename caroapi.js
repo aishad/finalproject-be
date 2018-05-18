@@ -126,9 +126,10 @@ app.post("/createTransaction", (req, res) => {
   });
 
   app.get("/getItemDetails", (req, res)=>{
-      //let itemID = req.query.itemID;
+      let itemID = req.query.itemID;
       //get the itemdetails for this itemID
       let RESB = {
+        itemID: itemID,
         name: "A pillow",
         imageURL: "items/pillow.jpg",
         blurb: "",
@@ -169,5 +170,12 @@ app.post("/createTransaction", (req, res) => {
     }
     res.send(RESB)
 
+  })
+
+  app.get("/getItemsBought", (req, res) => {
+      let userID=req.query.userID;
+      //get the itemsbought for this userID via transaction database
+      let RESB = {itemsBought: ["123455", "123445"]}
+      res.send(RESB)
   })
 app.listen(4000, () => console.log("Listening on port 4000!"));
