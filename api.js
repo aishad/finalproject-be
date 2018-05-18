@@ -51,9 +51,10 @@ app.post('/uploadPicProfile', (req, res) => {
 })
 //////////////////
 
-app.get("/getartistdetails", (req, res) => {
-  //let reqb = req.query.artistName;
-  reqb = { artistName: "caro" };
+app.post("/getArtistProfile", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+  //let reqb = {artistName: this.props.artistName}
+  console.log("getArtistProfile-2", reqb);
 
   RESB = {
     artistName: "caro",
@@ -83,6 +84,7 @@ app.get("/getartistdetails", (req, res) => {
       }
     ]
   };
+  console.log("getArtistProfile-3", RESB)
   res.send(JSON.stringify(RESB));
 });
 
