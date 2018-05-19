@@ -15,24 +15,11 @@ app.use(express.static('images'))
 
 app.post("/createListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-  console.log("createListing-2",reqb)
-  // reqb = {
-  //     artistName: "aisha",
-  //     name: 'print',
-  //     price: 100,
-  //     cat: "Prints",
-  //     blurb: "cool print",
-  //     quantity: 1,
-  //     imageURL1: '/items/aisha.jpg',
-  //     imageURL2: '/items/pillow.jpg',
-  //     imageURL3: '/items/embroidery.jpg',
-  // }
-
-  // let RESB = { itemID: "123" };
+  //console.log("createListing-2",reqb)
   mongo.createListing(reqb)
   .then(itemID => {
     if(itemID) {
-      console.log('itemID', itemID)
+      //console.log('itemID', itemID)
       return res.send(JSON.stringify({ success: true, itemID }));
     }
     // console.log("createListing-3",RESB)
@@ -83,37 +70,7 @@ app.post('/uploadSubmission', (req, res) => {
 
 app.post("/getArtistProfile", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-  //let reqb = {artistName: this.props.artistName}
-// console.log("getArtistProfile-2", reqb);
-
-  // RESB = {
-  //   artistName: "caro",
-  //   bio: "I'm a cool artist",
-  //   location: "Montreal, Canada",
-  //   profPicURL: "",
-  //   items: [
-  //     {
-  //       itemID: "123457",
-  //       name: "Awesome Embroidery",
-  //       price: 100,
-  //       artistName: "caro",
-  //       imageURL: "embroidery.jpg",
-  //       cat: "Spring",
-  //       blurb: "Best embroidery ever!",
-  //       quantity: 1
-  //     },
-  //     {
-  //       itemID: "123458",
-  //       name: "Pillow",
-  //       price: 100,
-  //       artistName: "caro",
-  //       imageURL: "pillow.jpg",
-  //       cat: "Popular",
-  //       blurb: "Best pillow ever!",
-  //       quantity: 2
-  //     }
-  //   ]
-  // };
+  
   mongo.getArtistProfile(reqb)
   .then(RESB=>{ 
   //  console.log("getArtistProfile-3", RESB)
