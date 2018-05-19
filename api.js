@@ -111,7 +111,7 @@ app.get("/getItemDetails", (req, res)=>{
   let RESB = {
     itemID:itemID,
     name: "A pillow",
-    imageURL: "items/pillow.jpg",
+    imageURL: "items/45589157_095_b.jpg",
     blurb: "",
     artistName: "clara",
     price: ""
