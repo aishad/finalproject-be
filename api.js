@@ -99,41 +99,60 @@ app.post('/uploadSubmission', (req, res) => {
 })
 //////////////////
 
+
+  // 1 ) Make sure you have the right input data
+  // 2 ) Make sure the shouldOutput is right and comment it
+  // 3 ) Create the function in mongo
+  // 4 ) Export it
+  // 5 ) Call the function with the right parameter in (reqb) with the then and how to deal with the then (see user detail how to call the mongo function)
+  // 6 ) Insert the database call on the mongo file and make sure you return it
+  // 7 ) Make sure you send it back to the front 
+  // AT ALL TIME, refer yourself with the console.log that was already there with 1,2,3,4
+
 app.post("/getArtistProfile", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
   //let reqb = {artistName: this.props.artistName}
   console.log("getArtistProfile-2", reqb);
 
-  RESB = {
-    artistName: "caro",
-    bio: "I'm a cool artist",
-    location: "Montreal, Canada",
-    profPicURL: "",
-    items: [
-      {
-        itemID: "123457",
-        name: "Awesome Embroidery",
-        price: 100,
-        artistName: "caro",
-        imageURL: "embroidery.jpg",
-        cat: "Spring",
-        blurb: "Best embroidery ever!",
-        quantity: 1
-      },
-      {
-        itemID: "123458",
-        name: "Pillow",
-        price: 100,
-        artistName: "caro",
-        imageURL: "pillow.jpg",
-        cat: "Popular",
-        blurb: "Best pillow ever!",
-        quantity: 2
-      }
-    ]
-  };
-  console.log("getArtistProfile-3", RESB)
-  res.send(JSON.stringify(RESB));
+  // RESB = {
+  //   artistName: "caro",
+  //   bio: "I'm a cool artist",
+  //   location: "Montreal, Canada",
+  //   profPicURL: "",
+  //   items: [
+  //     {
+  //       itemID: "123457",
+  //       name: "Awesome Embroidery",
+  //       price: 100,
+  //       artistName: "caro",
+  //       imageURL: "embroidery.jpg",
+  //       cat: "Spring",
+  //       blurb: "Best embroidery ever!",
+  //       quantity: 1
+  //     },
+  //     {
+  //       itemID: "123458",
+  //       name: "Pillow",
+  //       price: 100,
+  //       artistName: "caro",
+  //       imageURL: "pillow.jpg",
+  //       cat: "Popular",
+  //       blurb: "Best pillow ever!",
+  //       quantity: 2
+  //     }
+  //   ]
+  // };
+  
+  mongo.getArtistProfile(reqb).then((e)=>{
+    console.log("getArtistProfile-3", e)
+    if(e){
+      res.send(JSON.stringify({success : true, ...e}))
+    }else{
+      res.send(JSON.stringify({success : false}))
+    }
+  })
+  
+  //res.send(JSON.stringify(RESB));
 });
 
 app.get("/getItemDetails", (req, res)=>{
@@ -214,22 +233,41 @@ app.post("/getCart", (req, res) => {
 });
 
 app.post("/getUserDetails", (req, res) => {
+  // 1 ) Make sure you have the right input data
+  // 2 ) Make sure the shouldOutput is right
+  // 3 ) Define how to get the infos
+  // 4 ) Write pseudo Code
+  // 5 ) Create the function in mongo
+  // 6 ) Export it
+  // 7 ) Call the function with the right parameter in (reqb) with the then and how to deal with the then
+  // 8 ) Insert the database call on the mongo file and make sure you return it
+  // 9 ) Make sure you send it back to the front 
+  // AT ALL TIME, refer yourself with the console.log that was already there with 1,2,3,4
   let reqb = JSON.parse(req.body.toString());
   //   let reqb = { userID : this.props.userID }
   console.log("getUserDetails-2", reqb);
 
-  let RESB = {
-    firstName: "Jen",
-    lastName: "O",
-    email: "jen@email.com",
-    address: "123 Blah St.",
-    city: "Montreal",
-    province: "Quebec",
-    postalCode: "H13 1Y8",
-    country: "Canada"
-  };
-  console.log("getUserDetails-3", RESB);
-  res.send(JSON.stringify(RESB));
+  // SHOULD OUTPUT V
+  // let RESB = {
+  //   firstName: "Jen",
+  //   lastName: "O",
+  //   email: "jen@email.com",
+  //   address: "123 Blah St.",
+  //   city: "Montreal",
+  //   province: "Quebec",
+  //   postalCode: "H13 1Y8",
+  //   country: "Canada"
+  // };
+
+  // 5 V
+  mongo.getUserDetails(reqb).then(e=>{
+    if(e){
+      console.log("getUserDetails-3", e);
+      res.send(JSON.stringify({ success: true, ...e }));
+    }else{
+      res.send({success : false})
+    }
+  })
 });
 
 app.post("/createTransaction", (req, res) => {

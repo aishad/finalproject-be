@@ -47,6 +47,20 @@ function createListing(listing) {
     })
 }
 
+function getUserDetails(reqb) {
+    console.log("reqb", reqb)
+    return userInfoDB.then(e=>
+        e.findOne({'_id': ObjectId(reqb.userID)})
+    )
+}
+
+function getArtistProfile(artistName) {
+    return artistInfoDB.then(e=>
+        e.findOne({...artistName})
+    )
+}
+
+
 function getDuplicates(arr) {
     let hashMap = {};
     let duplicates = [];
@@ -78,7 +92,9 @@ function search(terms) {
 
 module.exports = {
     createListing,
-    search
+    search,
+    getUserDetails,
+    getArtistProfile
 }
 /*
 var connect = MongoClient.connect(uri,(err,client)=>{
