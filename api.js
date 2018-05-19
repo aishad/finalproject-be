@@ -13,23 +13,23 @@ app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
 
 app.use(express.static('images'))
 
-app.get('/listings', (req,res)=>{
-  client.db("all").collection("listings")
-  .find({'_id': ObjectId('5afdb3c1f050e705bfccb99e')})
-  .toArray((err, result)=>{
-    console.log("first", result)
-  })
-  res.send("found it")
-})
+// app.get('/listings', (req,res)=>{
+//   client.db("all").collection("listings")
+//   .find({'_id': ObjectId('5afdb3c1f050e705bfccb99e')})
+//   .toArray((err, result)=>{
+//     console.log("first", result)
+//   })
+//   res.send("found it")
+// })
 
-app.get('/test', (req,res)=>{
-  //let artistName="caro"
-  console.log(mongo.fishing())
-  var a = mongo.fishing()
-  console.log("QWE",a)
-  res.send("SUCCESS")
-  //res.send(mongo.getArtistInfo(artistName))
-})
+// app.get('/test', (req,res)=>{
+//   //let artistName="caro"
+//   console.log(mongo.fishing())
+//   var a = mongo.fishing()
+//   console.log("QWE",a)
+//   res.send("SUCCESS")
+//   //res.send(mongo.getArtistInfo(artistName))
+// })
 
 app.post("/createListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
@@ -138,17 +138,11 @@ app.post("/getArtistProfile", (req, res) => {
 
 app.get("/getItemDetails", (req, res)=>{
   let itemID = req.query.itemID;
-  //get the itemdetails for this itemID
-  let RESB = {
-    itemID:itemID,
-    name: "A pillow",
-    imageURL: "items/pillow.jpg",
-    blurb: "",
-    artistName: "clara",
-    price: ""
-  }
-  console.log("getItemDetails:", RESB)
-  res.send(JSON.stringify(RESB))
+  mongo.getItemDetails(itemID)
+  .then(resB=>{
+    console.log("front", resB[0])
+    res.send(JSON.stringify(resB[0]))
+  } )
 });
 
 

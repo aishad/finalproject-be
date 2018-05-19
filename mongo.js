@@ -76,9 +76,25 @@ function search(terms) {
     })
 }
 
+function getItemDetails(itemID) {
+    console.log(itemID)
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find({'_id': ObjectId(itemID)})
+        .toArray()
+    })
+    .then(res=>{
+        console.log(res)
+        return res;
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
+
 module.exports = {
     createListing,
-    search
+    search,
+    getItemDetails,
 }
 /*
 var connect = MongoClient.connect(uri,(err,client)=>{
