@@ -109,7 +109,7 @@ app.post("/getSearchResults", (req, res)=>{
     console.log('res', RESB)
     res.send(JSON.stringify(RESB))
 
-  }?
+  })
 })
 
 
@@ -182,8 +182,6 @@ app.post("/createTransaction", (req, res) => {
   mongo.createTransation(reqb)
   .then(RESB =>{
     console.log("createtransaction", RESB)
-    res.send(JSON.stringify(RESB));
-
   })
 });
 
