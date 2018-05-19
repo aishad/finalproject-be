@@ -68,6 +68,16 @@ app.post('/uploadSubmission', (req, res) => {
 })
 //////////////////
 
+
+  // 1 ) Make sure you have the right input data
+  // 2 ) Make sure the shouldOutput is right and comment it
+  // 3 ) Create the function in mongo
+  // 4 ) Export it
+  // 5 ) Call the function with the right parameter in (reqb) with the then and how to deal with the then (see user detail how to call the mongo function)
+  // 6 ) Insert the database call on the mongo file and make sure you return it
+  // 7 ) Make sure you send it back to the front 
+  // AT ALL TIME, refer yourself with the console.log that was already there with 1,2,3,4
+
 app.post("/getArtistProfile", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
   
@@ -91,16 +101,12 @@ app.get("/getItemDetails", (req, res)=>{
 app.post("/getOrders", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
   //let reqb = {artistName: this.props.artistName}
-  console.log("getOrders-2", reqb);
-
-  RESB = {
-    orders: [
-      { orderID: "#6789", buyerName: "Joe", itemID: ['123457','123458'], total: 100, date: "May 15, 2018", fulfilled: "fulfilled" },
-      { orderID: "#1237866", buyerName: "Joe", itemID: ['1479','123458'], total: 600, date: "May 10, 2018", fulfilled: "unfulfilled" }
-  ]
-  };
-  console.log("getOrders-3", RESB)
-  res.send(JSON.stringify(RESB));
+ // console.log("getOrders-2", reqb);
+  mongo.getOrders(reqb)
+  .then(RESB=>{
+ //   console.log("getOrders-3", RESB[0])
+    res.send(JSON.stringify(RESB[0]));
+  })
 });
 
 app.post("/getSearchResults", (req, res)=>{
@@ -130,22 +136,41 @@ app.post("/getCart", (req, res) => {
 });
 
 app.post("/getUserDetails", (req, res) => {
+  // 1 ) Make sure you have the right input data
+  // 2 ) Make sure the shouldOutput is right
+  // 3 ) Define how to get the infos
+  // 4 ) Write pseudo Code
+  // 5 ) Create the function in mongo
+  // 6 ) Export it
+  // 7 ) Call the function with the right parameter in (reqb) with the then and how to deal with the then
+  // 8 ) Insert the database call on the mongo file and make sure you return it
+  // 9 ) Make sure you send it back to the front 
+  // AT ALL TIME, refer yourself with the console.log that was already there with 1,2,3,4
   let reqb = JSON.parse(req.body.toString());
   //   let reqb = { userID : this.props.userID }
   console.log("getUserDetails-2", reqb);
 
-  let RESB = {
-    firstName: "Jen",
-    lastName: "O",
-    email: "jen@email.com",
-    address: "123 Blah St.",
-    city: "Montreal",
-    province: "Quebec",
-    postalCode: "H13 1Y8",
-    country: "Canada"
-  };
-  console.log("getUserDetails-3", RESB);
-  res.send(JSON.stringify(RESB));
+  // SHOULD OUTPUT V
+  // let RESB = {
+  //   firstName: "Jen",
+  //   lastName: "O",
+  //   email: "jen@email.com",
+  //   address: "123 Blah St.",
+  //   city: "Montreal",
+  //   province: "Quebec",
+  //   postalCode: "H13 1Y8",
+  //   country: "Canada"
+  // };
+
+  // 5 V
+  mongo.getUserDetails(reqb).then(e=>{
+    if(e){
+      console.log("getUserDetails-3", e);
+      res.send(JSON.stringify({ success: true, ...e }));
+    }else{
+      res.send({success : false})
+    }
+  })
 });
 
 app.post("/createTransaction", (req, res) => {
@@ -172,7 +197,10 @@ app.post("/createTransaction", (req, res) => {
   //   transactionID: "12442312312"
   // };
   //console.log("createTransaction-3", RESB);
-  res.send(JSON.stringify(RESB));
+  mongo.createTransation(reqb)
+  .then(RESB =>{
+    console.log("createtransaction", RESB)
+  })
 });
 
 
@@ -331,6 +359,23 @@ app.post("/createTransaction", (req, res) => {
     { itemID: '123457', name: "Awesome Emproidery", price: 100, artistName: "caro", imageURL: '/items/45513033_045_b10.jpg', cat: "Spring" }
     ]
     res.send(JSON.stringify(RESB));
+  })
+
+
+  app.get("/getArtistItems", (req, res) => {
+    let artistName=req.query.artistName;
+    //using the artistName, go through listings database and get the corresponding items
+    // let RESB=[
+    // { itemID: '123456', name: "Spring Prints", price: 50, artistName: "aisha", imageURL: '/items/45589157_095_b.jpg', cat: "Spring" },
+    // { itemID: '123457', name: "Awesome Emproidery", price: 100, artistName: "caro", imageURL: '/items/45513033_045_b10.jpg', cat: "Spring" }
+    // ]
+    mongo.getArtistItems(artistName)
+      .then(resB=> {
+        console.log("checkItems", resB)
+        res.send(JSON.stringify(resB))
+      }
+    )
+    // res.send(JSON.stringify(RESB));
   })
 
 

@@ -47,23 +47,49 @@ function createListing(listing) {
     })
 }
 
-function getArtistProfile(artistName){
-    return artistInfoDB.then(artistInfo =>{
-        return artistInfo.find({
-            artistName: "caro"
-        })
+function getUserDetails(reqb) {
+    console.log("reqb", reqb)
+    return userInfoDB.then(e=>
+        e.findOne({'_id': ObjectId(reqb.userID)})
+    )
+}
+
+function getArtistProfile(artistName) {
+    return artistInfoDB.then(e=>
+        e.findOne({...artistName})
+    )
+}
+
+function getArtistItems(artistName) {
+    console.log(artistName)
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find({artistName})
         .toArray()
     })
-    .then(res =>{ 
-  //      console.log("RES on mongo",res);
+    .then(res=>{
+        console.log(res)
         return res;
-    }).catch(err =>{
-        console.log(err)
-        return null
+    }).catch(err => {
+        console.log(err);
+        return null;
     })
-
-
 }
+
+// function getArtistProfile(artistName){
+//     return artistInfoDB.then(artistInfo =>{
+//         return artistInfo.find({
+//             artistName: artistName
+//         })
+//         .toArray()
+//     })
+//     .then(res =>{ 
+//   //      console.log("RES on mongo",res);
+//         return res;
+//     }).catch(err =>{
+//         console.log(err)
+//         return null
+//     })
+// }
 
 function getDuplicates(arr) {
     let hashMap = {};
@@ -124,13 +150,37 @@ function getCart(userID) {
         console.log(err);
         return null;
     })
+}
+function getOrders(artistName){
+    return transactionsDB.then(artistInfo =>{
+        return artistInfo.find({
+            details:{
+                $elemMatch: {artistName: 'aisha'}
+            } 
+        })
+        .toArray()
+    })
+    .then(res =>{
+        console.log("RES on mongo", res)
+        return res;
+    }).catch(err =>{
+        console.log(err);
+        return null
+    })
+}
+
+function createTransaction(){
 
 }
 
 module.exports = {
     createListing,
     search,
-    getItemDetails,
+    getUserDetails,
     getArtistProfile,
+    getItemDetails,
     getCart,
+    getOrders,
+    createTransaction,
+    getArtistItems,
 }
