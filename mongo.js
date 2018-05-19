@@ -176,7 +176,7 @@ function getItemDetails(itemID) {
         .toArray()
     })
     .then(res=>{
-        console.log(res);
+  //      console.log(res);
         return res;
     }).catch(err => {
         console.log(err);
@@ -218,6 +218,43 @@ function getOrders(artistName){
     })
 }
 
+function addUser(signUpInfo) {
+    return userInfoDB.then(userInfoCollection=>{
+        return userInfoCollection.insertOne(signUpInfo)
+        .then(res =>{
+        console.log("****THIS IS THE RES ID",res.insertedId);
+        return res.insertedId;
+        })
+        .catch(
+            err =>{
+                console.log(err);
+            }
+        )
+    })
+}
+
+function userSignUp(signUpInfo) {
+    return userInfoDB.then(userInfoCollection => {
+        return userInfoCollection.findOne({ email: signUpInfo.email })
+        .then(res => {
+            if(!res) return addUser(signUpInfo)
+        })
+    });
+}
+
+function userLogin(loginInfo){
+    return userInfoDB.then(userInfoCollection =>{
+        return userInfoCollection.find({
+            email: loginInfo.email,
+            password : loginInfo.password
+        })
+        .toArray()
+        .then(res =>{
+            if(res.length>=1) return ({email: res[0].email, firstName: res[0].firstName, id: res[0]._id})
+        })
+        .catch(err =>console.log(err))
+    })
+}
 function updateQuantity(item) {
     console.log('item', item, item.itemID)
     return listingsDB.then(listingsCollection => {
@@ -272,6 +309,9 @@ module.exports = {
     getItemDetails,
     getCart,
     getOrders,
+    getArtistItems,
+    userSignUp,
+    userLogin,
     createTransaction,
     checkout,
     getArtistItems,
