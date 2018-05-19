@@ -127,7 +127,7 @@ app.post("/getCart", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
   let userID = reqb.userID
   //   let reqb = { userID : this.props.userID }
-  console.log("getCart-2", reqb);
+  //console.log("getCart-2", reqb);
   mongo.getCart(userID)
   .then(resB=>{
     //console.log('hehe', resB)
@@ -148,24 +148,11 @@ app.post("/getUserDetails", (req, res) => {
   // AT ALL TIME, refer yourself with the console.log that was already there with 1,2,3,4
   let reqb = JSON.parse(req.body.toString());
   //   let reqb = { userID : this.props.userID }
-  console.log("getUserDetails-2", reqb);
+  //console.log("getUserDetails-2", reqb);
 
-  // SHOULD OUTPUT V
-  // let RESB = {
-  //   firstName: "Jen",
-  //   lastName: "O",
-  //   email: "jen@email.com",
-  //   address: "123 Blah St.",
-  //   city: "Montreal",
-  //   province: "Quebec",
-  //   postalCode: "H13 1Y8",
-  //   country: "Canada"
-  // };
-
-  // 5 V
   mongo.getUserDetails(reqb).then(e=>{
     if(e){
-      console.log("getUserDetails-3", e);
+      //console.log("getUserDetails-3", e);
       res.send(JSON.stringify({ success: true, ...e }));
     }else{
       res.send({success : false})
@@ -173,66 +160,16 @@ app.post("/getUserDetails", (req, res) => {
   })
 });
 
-app.post("/createTransaction", (req, res) => {
+app.post("/checkout", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-  console.log(reqb);
-  //   var reqb = {
-  //     // Shipping Infos
-  //     firstName: this.state.firstName,
-  //     lastName: this.state.lastName,
-  //     email: this.state.email,
-  //     address: this.state.address,
-  //     city: this.state.city,
-  //     province: this.state.province,
-  //     postalCode: this.state.postalCode,
-  //     country: this.state.country,
-  //     // userID
-  //     userID : this.props.userID,
-  //     // transactions
-  //     cartItems : this.state.cartItems,
-  //   }
-  //console.log("createTransaction-2", reqb);
-
-  // let RESB = {
-  //   transactionID: "12442312312"
-  // };
-  //console.log("createTransaction-3", RESB);
-  mongo.createTransation(reqb)
+  //console.log(reqb);
+  //console.log('mongo', mongo)
+  mongo.checkout(reqb)
   .then(RESB =>{
-    console.log("createtransaction", RESB)
+    console.log("createtransaction", RESB[0])
+    res.send(JSON.stringify(RESB[0]))
   })
 });
-
-
-
-
-  app.post("/updateQuantity", (req, res) => {
-    let reqb = JSON.parse(req.body.toString());
-    // var reqb = {
-    //     // userID
-    //     userID : this.props.userID,
-    //     // transactions
-    //     cartItems : this.state.cartItems,
-    //   }
-    console.log("updateQuantity-2", reqb);
-  
-    let RESB = {
-        cartItems: [
-          {
-            itemID: "123458",
-            name: "Pillow",
-            price: 100,
-            artistName: "caro",
-            imageURL: "items/pillow.jpg",
-            cat: "Popular",
-            quantity: 2,
-            quantityToBuy: 2,
-          }
-        ]
-    };
-    console.log("updateQuantity-3", RESB);
-    res.send(JSON.stringify(RESB));
-  });
 
   app.post("/removeItem", (req, res) => {
     let reqb = JSON.parse(req.body.toString());
@@ -242,14 +179,14 @@ app.post("/createTransaction", (req, res) => {
     //     // transactions
     //     cartItems : tempCartItems,
     //   }
-    console.log("removeItem-2", reqb);
+    //console.log("removeItem-2", reqb);
   
     let RESB = {
         cartItems: [
           //deleted the cartItem in question. we only had one cartItem example in this case
         ]
     };
-    console.log("removeItem-3", RESB);
+    //console.log("removeItem-3", RESB);
     res.send(JSON.stringify(RESB));
   });
 

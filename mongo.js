@@ -121,7 +121,7 @@ function search(terms) {
 }
 
 function getItemDetails(itemID) {
-    console.log(itemID)
+    //console.log(itemID)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({'_id': ObjectId(itemID)})
         .toArray()
@@ -169,9 +169,37 @@ function getOrders(artistName){
     })
 }
 
-function createTransaction(){
-
+function updateQuantity(item) {
+    console.log('item', item, item.itemID)
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.updateOne(
+            { _id : ObjectId(item.itemID) },
+            { $set: { quantity : item.quantity - item.quantityToBuy } }
+        )
+    });
 }
+
+function updateQuantities(items) {
+    return Promise.all(items.map(item => updateQuantity(item)));
+}
+
+function createTransaction(transaction){
+    return transactionsDB.then(transactionCollection =>{
+        return transactionCollection.insertOne(transaction)
+    .then(res=> {
+        return res.insertedId;
+    })
+    .catch(err => {
+        console.log(err);
+        return null;
+    })
+})
+}
+
+function checkout (transaction) {
+    return Promise.all([createTransaction(transaction), updateQuantities(transaction.cartItems)]);
+}
+
 
 module.exports = {
     createListing,
@@ -182,5 +210,8 @@ module.exports = {
     getCart,
     getOrders,
     createTransaction,
+    checkout,
     getArtistItems,
+    updateQuantities,
+    updateQuantity
 }
