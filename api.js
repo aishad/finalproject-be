@@ -109,7 +109,7 @@ app.post("/getSearchResults", (req, res)=>{
     console.log('res', RESB)
     res.send(JSON.stringify(RESB))
 
-  })
+  }?
 })
 
 
@@ -179,7 +179,12 @@ app.post("/createTransaction", (req, res) => {
   //   transactionID: "12442312312"
   // };
   //console.log("createTransaction-3", RESB);
-  res.send(JSON.stringify(RESB));
+  mongo.createTransation(reqb)
+  .then(RESB =>{
+    console.log("createtransaction", RESB)
+    res.send(JSON.stringify(RESB));
+
+  })
 });
 
 

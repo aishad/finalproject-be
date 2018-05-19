@@ -127,10 +127,15 @@ function getOrders(artistName){
     })
 }
 
+function createTransaction(){
+
+}
+
 module.exports = {
     createListing,
     search,
     getItemDetails,
     getArtistProfile,
-    getOrders
+    getOrders,
+    createTransaction
 }
