@@ -47,6 +47,24 @@ function createListing(listing) {
     })
 }
 
+function getArtistProfile(artistName){
+    return artistInfoDB.then(artistInfo =>{
+        return artistInfo.find({
+            artistName: "caro"
+        })
+        .toArray()
+    })
+    .then(res =>{ 
+  //      console.log("RES on mongo",res);
+        return res;
+    }).catch(err =>{
+        console.log(err)
+        return null
+    })
+
+
+}
+
 function getDuplicates(arr) {
     let hashMap = {};
     let duplicates = [];
@@ -56,7 +74,7 @@ function getDuplicates(arr) {
         if(!hashMap[stringified]) hashMap[stringified] = 1
         else hashMap[stringified]++;
     })
-    console.log('arr', arr)
+//    console.log('arr', arr)
     return duplicates;
 }
 
@@ -78,14 +96,6 @@ function search(terms) {
 
 module.exports = {
     createListing,
-    search
+    search, 
+    getArtistProfile
 }
-/*
-var connect = MongoClient.connect(uri,(err,client)=>{
-    client.db("all").collection("artistInfo")
-    .find({'artistName' : "caro"})
-    .toArray((err, result)=>{
-        console.log("name", result)
-    })
-})
-*/

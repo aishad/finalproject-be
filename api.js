@@ -13,23 +13,6 @@ app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
 
 app.use(express.static('images'))
 
-app.get('/listings', (req,res)=>{
-  client.db("all").collection("listings")
-  .find({'_id': ObjectId('5afdb3c1f050e705bfccb99e')})
-  .toArray((err, result)=>{
-    console.log("first", result)
-  })
-  res.send("found it")
-})
-
-app.get('/test', (req,res)=>{
-  //let artistName="caro"
-  console.log(mongo.fishing())
-  var a = mongo.fishing()
-  console.log("QWE",a)
-  res.send("SUCCESS")
-  //res.send(mongo.getArtistInfo(artistName))
-})
 
 app.post("/createListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
@@ -102,38 +85,41 @@ app.post('/uploadSubmission', (req, res) => {
 app.post("/getArtistProfile", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
   //let reqb = {artistName: this.props.artistName}
-  console.log("getArtistProfile-2", reqb);
+// console.log("getArtistProfile-2", reqb);
 
-  RESB = {
-    artistName: "caro",
-    bio: "I'm a cool artist",
-    location: "Montreal, Canada",
-    profPicURL: "",
-    items: [
-      {
-        itemID: "123457",
-        name: "Awesome Embroidery",
-        price: 100,
-        artistName: "caro",
-        imageURL: "embroidery.jpg",
-        cat: "Spring",
-        blurb: "Best embroidery ever!",
-        quantity: 1
-      },
-      {
-        itemID: "123458",
-        name: "Pillow",
-        price: 100,
-        artistName: "caro",
-        imageURL: "pillow.jpg",
-        cat: "Popular",
-        blurb: "Best pillow ever!",
-        quantity: 2
-      }
-    ]
-  };
-  console.log("getArtistProfile-3", RESB)
-  res.send(JSON.stringify(RESB));
+  // RESB = {
+  //   artistName: "caro",
+  //   bio: "I'm a cool artist",
+  //   location: "Montreal, Canada",
+  //   profPicURL: "",
+  //   items: [
+  //     {
+  //       itemID: "123457",
+  //       name: "Awesome Embroidery",
+  //       price: 100,
+  //       artistName: "caro",
+  //       imageURL: "embroidery.jpg",
+  //       cat: "Spring",
+  //       blurb: "Best embroidery ever!",
+  //       quantity: 1
+  //     },
+  //     {
+  //       itemID: "123458",
+  //       name: "Pillow",
+  //       price: 100,
+  //       artistName: "caro",
+  //       imageURL: "pillow.jpg",
+  //       cat: "Popular",
+  //       blurb: "Best pillow ever!",
+  //       quantity: 2
+  //     }
+  //   ]
+  // };
+  mongo.getArtistProfile(reqb)
+  .then(RESB=>{ 
+  //  console.log("getArtistProfile-3", RESB)
+   res.send(JSON.stringify(RESB));
+  })
 });
 
 app.get("/getItemDetails", (req, res)=>{
@@ -147,7 +133,7 @@ app.get("/getItemDetails", (req, res)=>{
     artistName: "clara",
     price: ""
   }
-  console.log("getItemDetails:", RESB)
+ // console.log("getItemDetails:", RESB)
   res.send(JSON.stringify(RESB))
 });
 
