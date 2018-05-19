@@ -47,8 +47,23 @@ function createListing(listing) {
     })
 }
 
+function editListing(listing) {
+    return listingsDB.then(listingsCollection => {
+        //return listingsCollection.insertOne(listing)
+        return listingsCollection.updateOne(
+            {_id: ObjectId(listing.itemID)},
+            {$set: {...listing} }
+        )
+        .then(res => res.upsertedId)
+        .catch(err => {
+            console.log(err);
+            return null;
+        })
+    })
+}
+
 function getUserDetails(reqb) {
-    console.log("reqb", reqb)
+    //console.log("reqb", reqb)
     return userInfoDB.then(e=>
         e.findOne({'_id': ObjectId(reqb.userID)})
     )
@@ -60,8 +75,21 @@ function getArtistProfile(artistName) {
     )
 }
 
+function getRandomItems() {
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find()
+        .toArray()
+    })
+    .then(res=>{
+        console.log("all",res)
+        return res.slice(0,8);
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
+
 function getArtistItems(artistName) {
-    console.log(artistName)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({artistName})
         .toArray()
@@ -120,8 +148,26 @@ function search(terms) {
     })
 }
 
+// function getItemDetails(itemID) {
+//     console.log(itemID)
+//     return listingsDB.then(listingsCollection => {
+//         return listingsCollection.find({'_id': ObjectId(itemID)})
+//         .toArray()
+//     })
+//     .then(res=>{
+//         console.log(res);
+//         return res;
+//     }).catch(err => {
+//         console.log(err);
+//         return null;
+//     })
+//     // return listingsDB.then(e=>
+//     //     e.findOne({'_id': ObjectId(reqb.itemID)})
+//     // )
+// }
+
 function getItemDetails(itemID) {
-//    console.log(itemID)
+    //console.log(itemID)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({'_id': ObjectId(itemID)})
         .toArray()
@@ -206,6 +252,50 @@ function userLogin(loginInfo){
         .catch(err =>console.log(err))
     })
 }
+function updateQuantity(item) {
+    console.log('item', item, item.itemID)
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.updateOne(
+            { _id : ObjectId(item.itemID) },
+            { $set: { quantity : item.quantity - item.quantityToBuy } }
+        )
+    });
+}
+
+function updateQuantities(items) {
+    return Promise.all(items.map(item => updateQuantity(item)));
+}
+
+function createTransaction(transaction){
+    return transactionsDB.then(transactionCollection =>{
+        return transactionCollection.insertOne(transaction)
+    .then(res=> {
+        return res.insertedId;
+    })
+    .catch(err => {
+        console.log(err);
+        return null;
+    })
+})
+}
+
+function checkout (transaction) {
+    return Promise.all([createTransaction(transaction), updateQuantities(transaction.cartItems)]);
+}
+function getCatItems(category) {
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find({category})
+        .toArray()
+    })
+    .then(res=>{
+        console.log(res)
+        return res;
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
+
 
 
 module.exports = {
@@ -218,5 +308,13 @@ module.exports = {
     getOrders,
     getArtistItems,
     userSignUp,
-    userLogin
+    userLogin,
+    createTransaction,
+    checkout,
+    getArtistItems,
+    updateQuantities,
+    updateQuantity,
+    getRandomItems,
+    getCatItems,
+    editListing,
 }
