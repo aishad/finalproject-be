@@ -47,8 +47,23 @@ function createListing(listing) {
     })
 }
 
+function editListing(listing) {
+    return listingsDB.then(listingsCollection => {
+        //return listingsCollection.insertOne(listing)
+        return listingsCollection.updateOne(
+            {_id: ObjectId(listing.itemID)},
+            {$set: {...listing} }
+        )
+        .then(res => res.upsertedId)
+        .catch(err => {
+            console.log(err);
+            return null;
+        })
+    })
+}
+
 function getUserDetails(reqb) {
-    console.log("reqb", reqb)
+    //console.log("reqb", reqb)
     return userInfoDB.then(e=>
         e.findOne({'_id': ObjectId(reqb.userID)})
     )
@@ -60,8 +75,21 @@ function getArtistProfile(artistName) {
     )
 }
 
+function getRandomItems() {
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find()
+        .toArray()
+    })
+    .then(res=>{
+        console.log("all",res)
+        return res.slice(0,8);
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
+
 function getArtistItems(artistName) {
-    console.log(artistName)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({artistName})
         .toArray()
@@ -120,6 +148,24 @@ function search(terms) {
     })
 }
 
+// function getItemDetails(itemID) {
+//     console.log(itemID)
+//     return listingsDB.then(listingsCollection => {
+//         return listingsCollection.find({'_id': ObjectId(itemID)})
+//         .toArray()
+//     })
+//     .then(res=>{
+//         console.log(res);
+//         return res;
+//     }).catch(err => {
+//         console.log(err);
+//         return null;
+//     })
+//     // return listingsDB.then(e=>
+//     //     e.findOne({'_id': ObjectId(reqb.itemID)})
+//     // )
+// }
+
 function getItemDetails(itemID) {
     console.log(itemID)
     return listingsDB.then(listingsCollection => {
@@ -173,6 +219,22 @@ function createTransaction(){
 
 }
 
+function getCatItems(category) {
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find({category})
+        .toArray()
+    })
+    .then(res=>{
+        console.log(res)
+        return res;
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
+
+
+
 module.exports = {
     createListing,
     search,
@@ -183,4 +245,7 @@ module.exports = {
     getOrders,
     createTransaction,
     getArtistItems,
+    getRandomItems,
+    getCatItems,
+    editListing,
 }

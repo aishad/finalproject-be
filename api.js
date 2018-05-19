@@ -27,6 +27,19 @@ app.post("/createListing", (req, res) => {
   });
 });
 
+app.post("/editListing", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+
+  mongo.editListing(reqb)
+  .then(itemID => {
+    if(itemID) {
+      return res.send(JSON.stringify({ success: true, itemID }));
+    }
+
+    res.send(JSON.stringify({ success: false }));
+  });
+});
+
 //////////////////
 app.post('/uploadPicCat', (req, res) => {
   var extension = req.query.ext.split('.').pop();
@@ -35,13 +48,16 @@ app.post('/uploadPicCat', (req, res) => {
   fs.writeFileSync('images/cat/' +  randomFilename, req.body);
   res.send("/cat/"+randomFilename)
 })
+
 app.post('/uploadPicItem', (req, res) => {
   var extension = req.query.ext.split('.').pop();
   var randomString = '' +  Math.floor(Math.random() * 10000000)
   var randomFilename = randomString + '.' + extension
-  fs.writeFileSync('images/item/' +  randomFilename, req.body);
-  res.send("/item/"+randomFilename)
+  fs.writeFileSync('images/items/' +  randomFilename, req.body);
+  console.log("req",req)
+  res.send("/items/"+randomFilename)
 })
+
 app.post('/uploadPicProfile', (req, res) => {
   var extension = req.query.ext.split('.').pop();
   var randomString = '' +  Math.floor(Math.random() * 10000000)
@@ -50,20 +66,19 @@ app.post('/uploadPicProfile', (req, res) => {
   res.send("/profile/"+randomFilename)
 })
 
-
 app.post('/uploadProfilePic', (req, res) => {
   var extension = req.query.ext.split('.').pop();
   var randomString = '' +  Math.floor(Math.random() * 10000000)
   var randomFilename = randomString + '.' + extension
-  fs.writeFileSync('images/item/' +  randomFilename, req.body); //NEED TO CHANGE WHERE PROFILE PICS GO images/artists/
-  res.send("/item/"+randomFilename)
+  fs.writeFileSync('images/profile/' +  randomFilename, req.body); //NEED TO CHANGE WHERE PROFILE PICS GO images/artists/
+  res.send("/profile/"+randomFilename)
 })
 
 app.post('/uploadSubmission', (req, res) => {
   var extension = req.query.ext.split('.').pop();
   var randomString = '' +  Math.floor(Math.random() * 10000000)
   var randomFilename = randomString + '.' + extension
-  fs.writeFileSync('images/item/' +  randomFilename, req.body); //NEED TO CHANGE WHERE SUBMISSION PICS GO images/submissions/
+  fs.writeFileSync('images/submission/' +  randomFilename, req.body); //NEED TO CHANGE WHERE SUBMISSION PICS GO images/submissions/
   res.send("success")
 })
 //////////////////
@@ -96,7 +111,6 @@ app.get("/getItemDetails", (req, res)=>{
     res.send(JSON.stringify(resB[0]))
   } )
 });
-
 
 app.post("/getOrders", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
@@ -295,70 +309,82 @@ app.post("/createTransaction", (req, res) => {
 
   app.get('/getRandomItems', (req, res)=>{
       //randomize items in the backend then send back those items
-      let RESB =
-        [
-            {
-              itemID: "123456",
-              name: "Spring Print",
-              price: 50,
-              artistName: "aisha",
-              imageURL: "/items/43581461_041_b2.jpg",
-              cat: "Spring",
-              blurb: "Here's my spring print",
-              quantity: 2
-            },
-            {
-              itemID: "123457",
-              name: "Awesome Embroidery",
-              price: 100,
-              artistName: "caro",
-              imageURL: "/items/44313724_104_b.jpg",
-              cat: "Spring",
-              blurb: "Best embroidery ever!",
-              quantity: 1
-            },
-            {
-              itemID: "123458",
-              name: "Pillow",
-              price: 100,
-              artistName: "caro",
-              imageURL: "/items/44622173_045_b.jpg",
-              cat: "Popular",
-              blurb: "Check out my pillow",
-              quantity: 1
-            },
-            {
-              itemID: "123459",
-              name: "Painting",
-              price: 20,
-              artistName: "jen",
-              imageURL: "/items/45513033_045_b10.jpg",
-              cat: "Prints",
-              blurb: "This is a cool painting",
-              quantity: 3
-            },
-            {
-              itemID: "123450",
-              name: "Cool Print",
-              price: 30,
-              artistName: "jen",
-              imageURL: "/items/45589157_095_b.jpg",
-              cat: "Prints",
-              blurb: "Great print",
-              quantity: 4
-            }
-          ]
-        res.send(JSON.stringify(RESB));
+      // let RESB =
+      //   [
+      //       {
+      //         itemID: "123456",
+      //         name: "Spring Print",
+      //         price: 50,
+      //         artistName: "aisha",
+      //         img1: "/items/43581461_041_b2.jpg",
+      //         cat: "Spring",
+      //         blurb: "Here's my spring print",
+      //         quantity: 2
+      //       },
+      //       {
+      //         itemID: "123457",
+      //         name: "Awesome Embroidery",
+      //         price: 100,
+      //         artistName: "caro",
+      //         img1: "/items/44313724_104_b.jpg",
+      //         cat: "Spring",
+      //         blurb: "Best embroidery ever!",
+      //         quantity: 1
+      //       },
+      //       {
+      //         itemID: "123458",
+      //         name: "Pillow",
+      //         price: 100,
+      //         artistName: "caro",
+      //         img1: "/items/44622173_045_b.jpg",
+      //         cat: "Popular",
+      //         blurb: "Check out my pillow",
+      //         quantity: 1
+      //       },
+      //       {
+      //         itemID: "123459",
+      //         name: "Painting",
+      //         price: 20,
+      //         artistName: "jen",
+      //         img1: "/items/45513033_045_b10.jpg",
+      //         cat: "Prints",
+      //         blurb: "This is a cool painting",
+      //         quantity: 3
+      //       },
+      //       {
+      //         itemID: "123450",
+      //         name: "Cool Print",
+      //         price: 30,
+      //         artistName: "jen",
+      //         img1: "/items/45589157_095_b.jpg",
+      //         cat: "Prints",
+      //         blurb: "Great print",
+      //         quantity: 4
+      //       }
+      //     ]
+      //   res.send(JSON.stringify(RESB));
+      mongo.getRandomItems()
+      .then(resB => {
+        console.log("all2",resB)
+        res.send(JSON.stringify(resB))
+      }
+      )
   })
 
   app.get("/getCatItems", (req, res) => {
     let cat=req.query.cat;
     //using the cat, go through listings database and get the corresponding items
-    let RESB=[
-    { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", imageURL: '/items/45589157_095_b.jpg', cat: "Spring" },
-    { itemID: '123457', name: "Awesome Emproidery", price: 100, artistName: "caro", imageURL: '/items/45513033_045_b10.jpg', cat: "Spring" }
-    ]
-    res.send(JSON.stringify(RESB));
+    // let RESB=[
+    // { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", img1: '/items/45589157_095_b.jpg', cat: "Spring" },
+    // { itemID: '123457', name: "Awesome Emproidery", price: 100, artistName: "caro", img1: '/items/45513033_045_b10.jpg', cat: "Spring" }
+    // ]
+    // res.send(JSON.stringify(RESB));
+    mongo.getCatItems(cat)
+    .then(resB=> {
+      //console.log("checkItems", resB)
+      res.send(JSON.stringify(resB))
+    }
+  )
   })
 
 
