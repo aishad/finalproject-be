@@ -48,12 +48,15 @@ function createListing(listing) {
 }
 
 function editListing(listing) {
+    console.log('LISTING!!!!!!',listing)
     return listingsDB.then(listingsCollection => {
         //return listingsCollection.insertOne(listing)
-        return listingsCollection.updateOne(
+        return listingsCollection.updateMany(
             {_id: ObjectId(listing.itemID)},
             {$set: {...listing} }
         )
+        //.then(res => console.log(res))
+        // .then(res => res.upsertedId)
         .then(res => res.upsertedId)
         .catch(err => {
             console.log(err);
