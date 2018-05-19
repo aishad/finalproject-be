@@ -119,25 +119,14 @@ app.post("/getSearchResults", (req, res)=>{
 
 app.post("/getCart", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
+  let userID = reqb.userID
   //   let reqb = { userID : this.props.userID }
   console.log("getCart-2", reqb);
-
-  let RESB = {
-    cartItems: [
-      {
-        itemID: "123458",
-        name: "Pillow",
-        price: 100,
-        artistName: "caro",
-        imageURL: "items/pillow.jpg",
-        cat: "Popular",
-        quantity: 2,
-        quantityToBuy: 1
-      }
-    ]
-  };
-  console.log("getCart-3", RESB);
-  res.send(JSON.stringify(RESB));
+  mongo.getCart(userID)
+  .then(resB=>{
+    //console.log('hehe', resB)
+    res.send(JSON.stringify(resB))
+  })
 });
 
 app.post("/getUserDetails", (req, res) => {
@@ -238,10 +227,9 @@ app.post("/createTransaction", (req, res) => {
 
   app.post("/addToCart", (req, res) => {
     //   let parsed = JSON.parse(req.body.toString());
-    //   let userID = parsed.userID;
-    //   let itemID = parsed.itemID;
+   // parsed contains name, blurb, description, id, etc.
     //   let quantity = parsed.quantity;
-    // using the above info, add the item in question to the user's list of cartitems, then send back userinfo
+    // using the above info, add the item in question & its details to the user's list of cartitems, then send back userinfo
     let RESB = {
         id: "123",
         firstName: "Jen",

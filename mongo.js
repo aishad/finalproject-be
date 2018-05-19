@@ -101,7 +101,7 @@ function getItemDetails(itemID) {
         .toArray()
     })
     .then(res=>{
-        console.log(res)
+        console.log(res);
         return res;
     }).catch(err => {
         console.log(err);
@@ -109,9 +109,28 @@ function getItemDetails(itemID) {
     })
 }
 
+function getCart(userID) {
+    //console.log(userID)
+    return userInfoDB.then(userInfoCollection => {
+        return userInfoCollection.find({'_id': ObjectId(userID)})
+        .toArray()
+    })
+    .then(resp=> {
+        //console.log('yes', res);
+        let resObj=resp[0]; //res itself is in an array, so just access the 0th element of the array to get the object
+        let cartItems=resObj.cartItems;
+        return cartItems;
+    }).catch(err=>{
+        console.log(err);
+        return null;
+    })
+
+}
+
 module.exports = {
     createListing,
     search,
     getItemDetails,
-    getArtistProfile
+    getArtistProfile,
+    getCart,
 }
