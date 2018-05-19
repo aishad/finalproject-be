@@ -342,39 +342,38 @@ app.post("/checkout", (req, res) => {
     // res.send(JSON.stringify(RESB));
   })
 
-
   app.post("/userLogin", (req, res) => {
-    // let reqb = {
-    //   email: "jen@email.com",
-    //   password: "123456",
-    // }
     let reqb = JSON.parse(req.body.toString());
-    let RESB = {
-      email: "jen@email.com",
-      firstName: "jen",
-      id: "123456",
-      success: true
-    }
-    res.send(JSON.stringify(RESB));
+    mongo.userLogin(reqb)
+    .then(RESB =>{
+      if (RESB){
+        return res.send(JSON.stringify({success:true, RESB}))
+      }
+      return res.send(JSON.stringify({success:false}))
+    })
+    .catch(err =>console.log(err))
   });
 
   app.post("/userSignUp", (req, res) => {
-    // let reqb = {
-    //   firstName: "jen",
-    //   lastName: "o",
-    //   emailSignUp: "jen@email.com",
-    //   passwordSignUp: "123456",
-    //   passwordSignUpConf: "123456"
-    // }
     let reqb = JSON.parse(req.body.toString());
-    let RESB = {
-      email: "jen@email.com",
-      firstName: "jen",
-      id: "123456",
-      success: true
-    }
-    res.send(JSON.stringify(RESB));
+    let parsedReqb = {
+      email: reqb.emailSignUp,
+      firstName: reqb.firstName,
+      lastName: reqb.lastName,
+      password: reqb.passwordSignUp,
+      confirmPassword: reqb.passwordSignUpConf
+    };
+    mongo.userSignUp(parsedReqb)
+    .then(RESB => {
+       if(RESB) {
+         return res.send(JSON.stringify({ success: true, email: parsedReqb.email, id: RESB }));
+       }
+       return res.send(JSON.stringify({ success: false }));
+      })
+      .catch(err => console.log(err))
   });
+
+
 
   app.post("/artistLogin", (req, res) => {
     // let reqb = {
@@ -382,10 +381,8 @@ app.post("/checkout", (req, res) => {
     //   aPassword: '123456',
     // }
     let reqb = JSON.parse(req.body.toString());
-    console.log(reqb)
-    let RESB = {
-      artistName: 'aisha'
-    }
+    console.log("artistLogin",reqb)
+ //   mongo.artistLogin(reqb)
     res.send(JSON.stringify(RESB));
     console.log(res)
   });
@@ -404,10 +401,26 @@ app.post("/checkout", (req, res) => {
       // sImageURL3: 'image3.jpg',
     // }
     let reqb = JSON.parse(req.body.toString());
-    console.log(reqb)
-    let RESB = "success"
-    res.send(JSON.stringify(RESB));
-    console.log(res)
+    let parsedReqb={
+         email: parsedReqb.sEmail,
+         artistName: parsedReqb.sName,
+         password: parsedReqb.sPassword,
+         confirmPassword: parsedReqb.sPasswordConf,
+         bio: parsedReqb.sDescription,
+         location: parsedReqb.sLocation,
+         profPicURL: parsedReqb.sProfPicURL,
+         imgURL1 : parsedReqb.sImageURL1,
+         imgURL2 : parsedReqb.sImageURL2,
+         imgURL3 : parsedReqb.sImageURL3
+    }
+    mongo.artistSignUp(parsedReqb)
+    .then(RESB =>{
+      if (RESB){
+        return res.send(JSON.stringify({success: true, email: parsedReqb.email, id: RESB}))
+      }
+      return res.send(JSON.stringify({success: false}))
+    })
+    .catch(err => console.log(err))
   });
 
 
