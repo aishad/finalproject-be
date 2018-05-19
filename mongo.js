@@ -50,7 +50,7 @@ function createListing(listing) {
 function getArtistProfile(artistName){
     return artistInfoDB.then(artistInfo =>{
         return artistInfo.find({
-            artistName: "caro"
+            artistName: artistName
         })
         .toArray()
     })
@@ -109,9 +109,28 @@ function getItemDetails(itemID) {
     })
 }
 
+function getOrders(artistName){
+    return transactionsDB.then(artistInfo =>{
+        return artistInfo.find({
+            details:{
+                $elemMatch: {artistName: 'aisha'}
+            } 
+        })
+        .toArray()
+    })
+    .then(res =>{
+        console.log("RES on mongo", res)
+        return res;
+    }).catch(err =>{
+        console.log(err);
+        return null
+    })
+}
+
 module.exports = {
     createListing,
     search,
     getItemDetails,
-    getArtistProfile
+    getArtistProfile,
+    getOrders
 }

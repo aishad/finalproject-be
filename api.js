@@ -91,16 +91,12 @@ app.get("/getItemDetails", (req, res)=>{
 app.post("/getOrders", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
   //let reqb = {artistName: this.props.artistName}
-  console.log("getOrders-2", reqb);
-
-  RESB = {
-    orders: [
-      { orderID: "#6789", buyerName: "Joe", itemID: ['123457','123458'], total: 100, date: "May 15, 2018", fulfilled: "fulfilled" },
-      { orderID: "#1237866", buyerName: "Joe", itemID: ['1479','123458'], total: 600, date: "May 10, 2018", fulfilled: "unfulfilled" }
-  ]
-  };
-  console.log("getOrders-3", RESB)
-  res.send(JSON.stringify(RESB));
+ // console.log("getOrders-2", reqb);
+  mongo.getOrders(reqb)
+  .then(RESB=>{
+ //   console.log("getOrders-3", RESB[0])
+    res.send(JSON.stringify(RESB[0]));
+  })
 });
 
 app.post("/getSearchResults", (req, res)=>{
