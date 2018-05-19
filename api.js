@@ -2,10 +2,34 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const fs = require("fs")
+var MongoClient = require('mongodb').MongoClient;
+var uri = "mongodb+srv://jen:111@cluster0-wjok0.mongodb.net/admin";
+var ObjectId = require('mongodb').ObjectId;
+const mongo = require('./mongo.js')
+
+var connect = MongoClient.connect(uri,(err,client)=>{
 
 app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
 
 app.use(express.static('images'))
+
+app.get('/listings', (req,res)=>{
+  client.db("all").collection("listings")
+  .find({'_id': ObjectId('5afdb3c1f050e705bfccb99e')})
+  .toArray((err, result)=>{
+    console.log("first", result)
+  })
+  res.send("found it")
+})
+
+app.get('/test', (req,res)=>{
+  //let artistName="caro"
+  console.log(mongo.fishing())
+  var a = mongo.fishing()
+  console.log("QWE",a)
+  res.send("SUCCESS")
+  //res.send(mongo.getArtistInfo(artistName))
+})
 
 app.post("/createListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
@@ -22,9 +46,16 @@ app.post("/createListing", (req, res) => {
   //     imageURL3: '/items/embroidery.jpg',
   // }
 
-  let RESB = { itemID: "123" };
-  console.log("createListing-3",RESB)
-  res.send(JSON.stringify(RESB));
+  // let RESB = { itemID: "123" };
+  mongo.createListing(reqb)
+  .then(itemID => {
+    if(itemID) {
+      console.log('itemID', itemID)
+      return res.send(JSON.stringify({ success: true, itemID }));
+    }
+    // console.log("createListing-3",RESB)
+    res.send(JSON.stringify({ success: false }));
+  });
 });
 
 //////////////////
@@ -140,17 +171,22 @@ app.post("/getSearchResults", (req, res)=>{
   let reqb= JSON.parse(req.body.toString());
 //  let reqb = {searchTerm: this.props.query}
   console.log("getResults-2", reqb);
-  RESB={
-    searchItems: [
-      { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", imageURL: 'print.jpg', cat: "Spring", blurb: "Here's my spring print", quantity: 2 },
-      { itemID: '123457', name: "Awesome Embroidery", price: 100, artistName: "caro", imageURL: 'embroidery.jpg', cat: "Spring", blurb: "Best embroidery ever!", quantity: 1 },
-      { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
-      { itemID: '123459', name: "Painting", price: 20, artistName: "jen", imageURL: 'painting.jpg', cat: "Prints", blurb: "This is a cool painting", quantity: 3 },
-      { itemID: '123450', name: "Cool Print", price: 30, artistName: "jen", imageURL: 'print.jpg', cat: "Prints", blurb: "Great print", quantity: 4 },
-  ]
-  }
-  console.log("getResults-3", RESB)
-  res.send(JSON.stringify(RESB))
+  // RESB={
+  //   searchItems: [
+  //     { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", imageURL: 'print.jpg', cat: "Spring", blurb: "Here's my spring print", quantity: 2 },
+  //     { itemID: '123457', name: "Awesome Embroidery", price: 100, artistName: "caro", imageURL: 'embroidery.jpg', cat: "Spring", blurb: "Best embroidery ever!", quantity: 1 },
+  //     { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
+  //     { itemID: '123459', name: "Painting", price: 20, artistName: "jen", imageURL: 'painting.jpg', cat: "Prints", blurb: "This is a cool painting", quantity: 3 },
+  //     { itemID: '123450', name: "Cool Print", price: 30, artistName: "jen", imageURL: 'print.jpg', cat: "Prints", blurb: "Great print", quantity: 4 },
+  // ]
+  // }
+  // console.log("getResults-3", RESB)
+  let terms = reqb.query.split(' ');
+  mongo.search(terms).then(RESB => {
+    console.log('res', RESB)
+    res.send(JSON.stringify(RESB))
+
+  })
 })
 
 
@@ -198,6 +234,7 @@ app.post("/getUserDetails", (req, res) => {
 
 app.post("/createTransaction", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
+  console.log(reqb);
   //   var reqb = {
   //     // Shipping Infos
   //     firstName: this.state.firstName,
@@ -215,9 +252,9 @@ app.post("/createTransaction", (req, res) => {
   //   }
   //console.log("createTransaction-2", reqb);
 
-  let RESB = {
-    transactionID: "12442312312"
-  };
+  // let RESB = {
+  //   transactionID: "12442312312"
+  // };
   //console.log("createTransaction-3", RESB);
   res.send(JSON.stringify(RESB));
 });
@@ -462,5 +499,5 @@ app.post("/createTransaction", (req, res) => {
     }
     res.send(JSON.stringify(RESB));
   })
-
+})
 app.listen(4000, () => console.log("Listening on port 4000!"));
