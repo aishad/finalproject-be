@@ -60,6 +60,21 @@ function getArtistProfile(artistName) {
     )
 }
 
+// function getArtistProfile(artistName){
+//     return artistInfoDB.then(artistInfo =>{
+//         return artistInfo.find({
+//             artistName: artistName
+//         })
+//         .toArray()
+//     })
+//     .then(res =>{ 
+//   //      console.log("RES on mongo",res);
+//         return res;
+//     }).catch(err =>{
+//         console.log(err)
+//         return null
+//     })
+// }
 
 function getDuplicates(arr) {
     let hashMap = {};
@@ -70,7 +85,7 @@ function getDuplicates(arr) {
         if(!hashMap[stringified]) hashMap[stringified] = 1
         else hashMap[stringified]++;
     })
-    console.log('arr', arr)
+//    console.log('arr', arr)
     return duplicates;
 }
 
@@ -90,18 +105,49 @@ function search(terms) {
     })
 }
 
+function getItemDetails(itemID) {
+    console.log(itemID)
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find({'_id': ObjectId(itemID)})
+        .toArray()
+    })
+    .then(res=>{
+        console.log(res)
+        return res;
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
+
+function getOrders(artistName){
+    return transactionsDB.then(artistInfo =>{
+        return artistInfo.find({
+            details:{
+                $elemMatch: {artistName: 'aisha'}
+            } 
+        })
+        .toArray()
+    })
+    .then(res =>{
+        console.log("RES on mongo", res)
+        return res;
+    }).catch(err =>{
+        console.log(err);
+        return null
+    })
+}
+
+function createTransaction(){
+
+}
+
 module.exports = {
     createListing,
     search,
     getUserDetails,
-    getArtistProfile
+    getArtistProfile,
+    getItemDetails,
+    getOrders,
+    createTransaction,
 }
-/*
-var connect = MongoClient.connect(uri,(err,client)=>{
-    client.db("all").collection("artistInfo")
-    .find({'artistName' : "caro"})
-    .toArray((err, result)=>{
-        console.log("name", result)
-    })
-})
-*/
