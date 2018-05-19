@@ -60,6 +60,21 @@ function getArtistProfile(artistName) {
     )
 }
 
+function getArtistItems(artistName) {
+    console.log(artistName)
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find({artistName})
+        .toArray()
+    })
+    .then(res=>{
+        console.log(res)
+        return res;
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
+
 // function getArtistProfile(artistName){
 //     return artistInfoDB.then(artistInfo =>{
 //         return artistInfo.find({
@@ -150,4 +165,5 @@ module.exports = {
     getItemDetails,
     getOrders,
     createTransaction,
+    getArtistItems,
 }

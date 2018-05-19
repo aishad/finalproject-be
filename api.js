@@ -374,6 +374,23 @@ app.post("/createTransaction", (req, res) => {
   })
 
 
+  app.get("/getArtistItems", (req, res) => {
+    let artistName=req.query.artistName;
+    //using the artistName, go through listings database and get the corresponding items
+    // let RESB=[
+    // { itemID: '123456', name: "Spring Prints", price: 50, artistName: "aisha", imageURL: '/items/45589157_095_b.jpg', cat: "Spring" },
+    // { itemID: '123457', name: "Awesome Emproidery", price: 100, artistName: "caro", imageURL: '/items/45513033_045_b10.jpg', cat: "Spring" }
+    // ]
+    mongo.getArtistItems(artistName)
+      .then(resB=> {
+        console.log("checkItems", resB)
+        res.send(JSON.stringify(resB))
+      }
+    )
+    // res.send(JSON.stringify(RESB));
+  })
+
+
   app.post("/userLogin", (req, res) => {
     // let reqb = {
     //   email: "jen@email.com",
