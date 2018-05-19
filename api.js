@@ -1,29 +1,31 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const fs = require("fs");
-var MongoClient = require("mongodb").MongoClient;
+const fs = require("fs")
+var MongoClient = require('mongodb').MongoClient;
 var uri = "mongodb+srv://jen:111@cluster0-wjok0.mongodb.net/admin";
-var ObjectId = require("mongodb").ObjectId;
-const mongo = require("./mongo.js");
+var ObjectId = require('mongodb').ObjectId;
+const mongo = require('./mongo.js')
 
-var connect = MongoClient.connect(uri, (err, client) => {
-  app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
+var connect = MongoClient.connect(uri,(err,client)=>{
 
-  app.use(express.static("images"));
+app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
 
-  app.post("/createListing", (req, res) => {
-    let reqb = JSON.parse(req.body.toString());
-    //console.log("createListing-2",reqb)
-    mongo.createListing(reqb).then(itemID => {
-      if (itemID) {
-        //console.log('itemID', itemID)
-        return res.send(JSON.stringify({ success: true, itemID }));
-      }
-      // console.log("createListing-3",RESB)
-      res.send(JSON.stringify({ success: false }));
-    });
+app.use(express.static('images'))
+
+app.post("/createListing", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+  //console.log("createListing-2",reqb)
+  mongo.createListing(reqb)
+  .then(itemID => {
+    if(itemID) {
+      //console.log('itemID', itemID)
+      return res.send(JSON.stringify({ success: true, itemID }));
+    }
+    // console.log("createListing-3",RESB)
+    res.send(JSON.stringify({ success: false }));
   });
+});
 
 app.post("/editListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
@@ -81,22 +83,6 @@ app.post('/uploadSubmission', (req, res) => {
 })
 //////////////////
 
-  app.post("/uploadProfilePic", (req, res) => {
-    var extension = req.query.ext.split(".").pop();
-    var randomString = "" + Math.floor(Math.random() * 10000000);
-    var randomFilename = randomString + "." + extension;
-    fs.writeFileSync("images/item/" + randomFilename, req.body); //NEED TO CHANGE WHERE PROFILE PICS GO images/artists/
-    res.send("/item/" + randomFilename);
-  });
-
-  app.post("/uploadSubmission", (req, res) => {
-    var extension = req.query.ext.split(".").pop();
-    var randomString = "" + Math.floor(Math.random() * 10000000);
-    var randomFilename = randomString + "." + extension;
-    fs.writeFileSync("images/item/" + randomFilename, req.body); //NEED TO CHANGE WHERE SUBMISSION PICS GO images/submissions/
-    res.send("success");
-  });
-  //////////////////
 
   // 1 ) Make sure you have the right input data
   // 2 ) Make sure the shouldOutput is right and comment it
@@ -104,18 +90,27 @@ app.post('/uploadSubmission', (req, res) => {
   // 4 ) Export it
   // 5 ) Call the function with the right parameter in (reqb) with the then and how to deal with the then (see user detail how to call the mongo function)
   // 6 ) Insert the database call on the mongo file and make sure you return it
-  // 7 ) Make sure you send it back to the front
+  // 7 ) Make sure you send it back to the front 
   // AT ALL TIME, refer yourself with the console.log that was already there with 1,2,3,4
 
-  app.post("/getArtistProfile", (req, res) => {
-    let reqb = JSON.parse(req.body.toString());
-    
-    mongo.getArtistProfile(reqb)
-    .then(RESB=>{
-    //  console.log("getArtistProfile-3", RESB)
-     res.send(JSON.stringify(RESB));
-    })
-   });
+app.post("/getArtistProfile", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+  
+  mongo.getArtistProfile(reqb)
+  .then(RESB=>{ 
+  //  console.log("getArtistProfile-3", RESB)
+   res.send(JSON.stringify(RESB));
+  })
+});
+
+app.get("/getItemDetails", (req, res)=>{
+  let itemID = req.query.itemID;
+  mongo.getItemDetails(itemID)
+  .then(resB=>{
+    console.log("front", resB[0])
+    res.send(JSON.stringify(resB[0]))
+  } )
+});
 
 app.post("/getOrders", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
@@ -201,9 +196,9 @@ app.post("/checkout", (req, res) => {
     //console.log("removeItem-2", reqb);
   
     let RESB = {
-      cartItems: [
-        //deleted the cartItem in question. we only had one cartItem example in this case
-      ]
+        cartItems: [
+          //deleted the cartItem in question. we only had one cartItem example in this case
+        ]
     };
     //console.log("removeItem-3", RESB);
     res.send(JSON.stringify(RESB));
@@ -211,7 +206,7 @@ app.post("/checkout", (req, res) => {
 
   app.post("/addToCart", (req, res) => {
     //   let parsed = JSON.parse(req.body.toString());
-    // parsed contains name, blurb, description, id, etc.
+   // parsed contains name, blurb, description, id, etc.
     //   let quantity = parsed.quantity;
     // using the above info, add the item in question & its details to the user's list of cartitems, then send back userinfo
     let RESB = {
@@ -314,7 +309,7 @@ app.post("/checkout", (req, res) => {
   })
 
   app.get("/getCatItems", (req, res) => {
-    let cat = req.query.cat;
+    let cat=req.query.cat;
     //using the cat, go through listings database and get the corresponding items
     // let RESB=[
     // { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", img1: '/items/45589157_095_b.jpg', cat: "Spring" },
@@ -331,12 +326,20 @@ app.post("/checkout", (req, res) => {
 
 
   app.get("/getArtistItems", (req, res) => {
-    let artistName = req.query.artistName;
-    mongo.getArtistItems(artistName).then(resB => {
-      console.log("checkItems", resB);
-      res.send(JSON.stringify(resB));
-    });
-  });
+    let artistName=req.query.artistName;
+    //using the artistName, go through listings database and get the corresponding items
+    // let RESB=[
+    // { itemID: '123456', name: "Spring Prints", price: 50, artistName: "aisha", imageURL: '/items/45589157_095_b.jpg', cat: "Spring" },
+    // { itemID: '123457', name: "Awesome Emproidery", price: 100, artistName: "caro", imageURL: '/items/45513033_045_b10.jpg', cat: "Spring" }
+    // ]
+    mongo.getArtistItems(artistName)
+      .then(resB=> {
+        console.log("checkItems", resB)
+        res.send(JSON.stringify(resB))
+      }
+    )
+    // res.send(JSON.stringify(RESB));
+  })
 
   app.post("/userLogin", (req, res) => {
     let reqb = JSON.parse(req.body.toString());
@@ -369,67 +372,67 @@ app.post("/checkout", (req, res) => {
       .catch(err => console.log(err))
   });
 
+
+
   app.post("/artistLogin", (req, res) => {
     // let reqb = {
     //   artistName: 'aisha',
     //   aPassword: '123456',
     // }
     let reqb = JSON.parse(req.body.toString());
-    console.log(reqb);
-    let RESB = {
-      artistName: "aisha"
-    };
+    console.log("artistLogin",reqb)
+ //   mongo.artistLogin(reqb)
     res.send(JSON.stringify(RESB));
-    console.log(res);
+    console.log(res)
   });
 
   app.post("/artistSignUp", (req, res) => {
     // let reqb = {
-    // sName: 'jen',
-    // sEmail: 'jen@email.com',
-    // sPassword: '123456',
-    // sPasswordConf: '123456',
-    // sDescription: "I'm an artist",
-    // sLocation: 'Montreal, QC',
-    // sProfPicURL: 'image.jpg',
-    // sImageURL1: 'image1.jpg',
-    // sImageURL2: 'image2.jpg',
-    // sImageURL3: 'image3.jpg',
+      // sName: 'jen',
+      // sEmail: 'jen@email.com',
+      // sPassword: '123456',
+      // sPasswordConf: '123456',
+      // sDescription: "I'm an artist",
+      // sLocation: 'Montreal, QC',
+      // sProfPicURL: 'image.jpg',
+      // sImageURL1: 'image1.jpg',
+      // sImageURL2: 'image2.jpg',
+      // sImageURL3: 'image3.jpg',
     // }
     let reqb = JSON.parse(req.body.toString());
-    console.log(reqb);
-    let RESB = "success";
-    res.send(JSON.stringify(RESB));
-    console.log(res);
+    let parsedReqb={
+         email: parsedReqb.sEmail,
+         artistName: parsedReqb.sName,
+         password: parsedReqb.sPassword,
+         confirmPassword: parsedReqb.sPasswordConf,
+         bio: parsedReqb.sDescription,
+         location: parsedReqb.sLocation,
+         profPicURL: parsedReqb.sProfPicURL,
+         imgURL1 : parsedReqb.sImageURL1,
+         imgURL2 : parsedReqb.sImageURL2,
+         imgURL3 : parsedReqb.sImageURL3
+    }
+    mongo.artistSignUp(parsedReqb)
+    .then(RESB =>{
+      if (RESB){
+        return res.send(JSON.stringify({success: true, email: parsedReqb.email, id: RESB}))
+      }
+      return res.send(JSON.stringify({success: false}))
+    })
+    .catch(err => console.log(err))
   });
 
+
+
   app.get("/getItemsBought", (req, res) => {
-    let userID = req.query.userID;
+    let userID=req.query.userID;
     //get the itemsbought for this userID via transaction database
     let RESB = {
-      itemsBought: [
-        {
-          itemID: "123457",
-          name: "Awesome Embroidery",
-          price: 100,
-          artistName: "caro",
-          imageURL: "embroidery.jpg",
-          cat: "Spring",
-          blurb: "Best embroidery ever!",
-          quantity: 1
-        },
-        {
-          itemID: "123458",
-          name: "Pillow",
-          price: 100,
-          artistName: "caro",
-          imageURL: "pillow.jpg",
-          cat: "Popular",
-          blurb: "Check out my pillow",
-          quantity: 1
-        }
-      ]
-    };
+      itemsBought: [ 
+        { itemID: '123457', name: "Awesome Embroidery", price: 100, artistName: "caro", imageURL: 'embroidery.jpg', cat: "Spring", blurb: "Best embroidery ever!", quantity: 1 },
+        { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
+     ]
+    }
     res.send(JSON.stringify(RESB));
   })
 })
