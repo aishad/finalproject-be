@@ -380,12 +380,8 @@ module.exports = {
     getRandomItems,
     getCatItems,
     editListing,
-<<<<<<< HEAD
     artistSignUp,
-    artistLogin
-
-=======
+    artistLogin,
     removeItem,
     addToCart
->>>>>>> 1e305ce8afee5701c6e297e3b23a551e311d815f
 }

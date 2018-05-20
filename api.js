@@ -107,11 +107,7 @@ app.get("/getItemDetails", (req, res)=>{
   let itemID = req.query.itemID;
   mongo.getItemDetails(itemID)
   .then(resB=>{
-<<<<<<< HEAD
-   // console.log("front", resB[0])
-=======
     //console.log("front", resB[0])
->>>>>>> 1e305ce8afee5701c6e297e3b23a551e311d815f
     res.send(JSON.stringify(resB[0]))
   } )
 });
