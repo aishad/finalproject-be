@@ -48,11 +48,6 @@ function createListing(listing) {
 }
 
 function editListing(listing) {
-<<<<<<< HEAD
-    // console.log('LISTING!!!!!!', listing)
-=======
-    //console.log('LISTING!!!!!!',listing)
->>>>>>> 5c1059161218b1836e0023cd8b3c0193b1fd6fb1
     return listingsDB.then(listingsCollection => {
         return listingsCollection.updateOne(
             {_id: ObjectId(listing.itemID)},
