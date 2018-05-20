@@ -325,6 +325,7 @@ function createTransaction(transaction){
 function checkout (transaction) {
     return Promise.all([createTransaction(transaction), updateQuantities(transaction.cartItems)]);
 }
+
 function getCatItems(category) {
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({category})
@@ -339,7 +340,26 @@ function getCatItems(category) {
     })
 }
 
+function removeItem (tempCartDetails) {
+    //console.log(tempCartDetails)
+    return userInfoDB.then(userInfoCollection => {
+        return userInfoCollection.updateOne(
+            {_id: ObjectId(tempCartDetails.userID)},
+            {$set: { cartItems : tempCartDetails.cartItems } }
+        ).then(res=>console.log("HELLO", res.ops))
+    })
+}
 
+function addToCart (cartObj) {
+    console.log("cartItem", cartObj)
+    // return userInfoDB.then(userInfoCollection => {
+    //     return userInfoCollection.updateOne(
+    //         {_id: ObjectId(cartObj.userID)},
+    //         {$set: {cartItems: cartItems.concat(cartObj.cartItems)}}
+    //     )
+        // ).then(res=>console.log("CARTUPDATED", res))
+//     })
+}
 
 module.exports = {
     createListing,
@@ -360,7 +380,12 @@ module.exports = {
     getRandomItems,
     getCatItems,
     editListing,
+<<<<<<< HEAD
     artistSignUp,
     artistLogin
 
+=======
+    removeItem,
+    addToCart
+>>>>>>> 1e305ce8afee5701c6e297e3b23a551e311d815f
 }

@@ -107,7 +107,11 @@ app.get("/getItemDetails", (req, res)=>{
   let itemID = req.query.itemID;
   mongo.getItemDetails(itemID)
   .then(resB=>{
+<<<<<<< HEAD
    // console.log("front", resB[0])
+=======
+    //console.log("front", resB[0])
+>>>>>>> 1e305ce8afee5701c6e297e3b23a551e311d815f
     res.send(JSON.stringify(resB[0]))
   } )
 });
@@ -194,21 +198,22 @@ app.post("/checkout", (req, res) => {
     //     cartItems : tempCartItems,
     //   }
     //console.log("removeItem-2", reqb);
-  
-    let RESB = {
-        cartItems: [
-          //deleted the cartItem in question. we only had one cartItem example in this case
-        ]
-    };
+    mongo.removeItem(reqb)
+    // let RESB = {
+    //     cartItems: [
+    //       //deleted the cartItem in question. we only had one cartItem example in this case
+    //     ]
+    // };
     //console.log("removeItem-3", RESB);
-    res.send(JSON.stringify(RESB));
+    //res.send(JSON.stringify());
   });
 
   app.post("/addToCart", (req, res) => {
-    //   let parsed = JSON.parse(req.body.toString());
+    let reqb = JSON.parse(req.body.toString());
    // parsed contains name, blurb, description, id, etc.
     //   let quantity = parsed.quantity;
-    // using the above info, add the item in question & its details to the user's list of cartitems, then send back userinfo
+    // using the above info, add the item in question & its details to the user's list of cartitems
+    mongo.addToCart(reqb)
     let RESB = {
         id: "123",
         firstName: "Jen",
