@@ -29,14 +29,13 @@ app.post("/createListing", (req, res) => {
 
 app.post("/editListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-
+  console.log("itemID!!!!!!!!!!!!!!!!",reqb)
   mongo.editListing(reqb)
-  .then(itemID => {
-    if(itemID) {
-      return res.send(JSON.stringify({ success: true, itemID }));
+  .then(resb => {
+    if(resb) {
+      return res.send(JSON.stringify({ success: true }));
     }
-
-    res.send(JSON.stringify({ success: false }));
+    return res.send(JSON.stringify({ success: false }));
   });
 });
 
@@ -107,7 +106,7 @@ app.get("/getItemDetails", (req, res)=>{
   let itemID = req.query.itemID;
   mongo.getItemDetails(itemID)
   .then(resB=>{
-    //console.log("front", resB[0])
+   // console.log("front", resB[0])
     res.send(JSON.stringify(resB[0]))
   } )
 });
@@ -195,6 +194,10 @@ app.post("/checkout", (req, res) => {
     //   }
     //console.log("removeItem-2", reqb);
     mongo.removeItem(reqb)
+    .then(resB => {
+      if (resB) return res.send(JSON.stringify({success: true}));
+      return res.send(JSON.stringify({success: false}));
+    })
     // let RESB = {
     //     cartItems: [
     //       //deleted the cartItem in question. we only had one cartItem example in this case
@@ -209,31 +212,8 @@ app.post("/checkout", (req, res) => {
    // parsed contains name, blurb, description, id, etc.
     //   let quantity = parsed.quantity;
     // using the above info, add the item in question & its details to the user's list of cartitems
-    mongo.addToCart(reqb)
-    let RESB = {
-        id: "123",
-        firstName: "Jen",
-        lastName: "O",
-        email: "jen@email.com",
-        address: "123 Blah St.",
-        city: "Montreal",
-        province: "Quebec",
-        postalCode: "H13 1Y8",
-        country: "Canada",
-        cartItems: [
-            {
-              itemID: "123458",
-              name: "Pillow",
-              price: 100,
-              artistName: "caro",
-              imageURL: "items/pillow.jpg",
-              cat: "Popular",
-              quantity: 2,
-              quantityToBuy: 1
-            },]
-
-    }
-    res.send(RESB)
+    mongo.addToCart(reqb.userID, reqb.cartObj)
+    res.send(JSON.stringify({ success: true }))
 
   })
 
@@ -303,7 +283,7 @@ app.post("/checkout", (req, res) => {
       //   res.send(JSON.stringify(RESB));
       mongo.getRandomItems()
       .then(resB => {
-       // console.log("all2",resB)
+        //console.log("all2",resB)
         res.send(JSON.stringify(resB))
       }
       )
@@ -311,6 +291,7 @@ app.post("/checkout", (req, res) => {
 
   app.get("/getCatItems", (req, res) => {
     let cat=req.query.cat;
+    console.log("cat",cat)
     //using the cat, go through listings database and get the corresponding items
     // let RESB=[
     // { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", img1: '/items/45589157_095_b.jpg', cat: "Spring" },

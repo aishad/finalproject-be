@@ -48,16 +48,12 @@ function createListing(listing) {
 }
 
 function editListing(listing) {
-    //console.log('LISTING!!!!!!',listing)
     return listingsDB.then(listingsCollection => {
-        //return listingsCollection.insertOne(listing)
-        return listingsCollection.updateMany(
+        return listingsCollection.updateOne(
             {_id: ObjectId(listing.itemID)},
-            {$set: {...listing} }
+            {$set: { ...listing } }
         )
-        //.then(res => console.log(res))
-        // .then(res => res.upsertedId)
-        .then(res => res.upsertedId)
+        .then(res => res.modifiedCount)
         .catch(err => {
             console.log(err);
             return null;
@@ -84,7 +80,7 @@ function getRandomItems() {
         .toArray()
     })
     .then(res=>{
-      //  console.log("all",res)
+        //console.log("all",res)
         return res.slice(0,8);
     }).catch(err => {
         console.log(err);
@@ -170,7 +166,7 @@ function search(terms) {
 // }
 
 function getItemDetails(itemID) {
-    //console.log(itemID)
+    console.log(itemID)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({'_id': ObjectId(itemID)})
         .toArray()
@@ -346,20 +342,21 @@ function removeItem (tempCartDetails) {
         return userInfoCollection.updateOne(
             {_id: ObjectId(tempCartDetails.userID)},
             {$set: { cartItems : tempCartDetails.cartItems } }
-        ).then(res=>console.log("HELLO", res.ops))
+        )
+        .then(res => res.modifiedCount)
     })
 }
 
-function addToCart (cartObj) {
-    console.log("cartItem", cartObj)
-    // return userInfoDB.then(userInfoCollection => {
-    //     return userInfoCollection.updateOne(
-    //         {_id: ObjectId(cartObj.userID)},
-    //         {$set: {cartItems: cartItems.concat(cartObj.cartItems)}}
-    //     )
-        // ).then(res=>console.log("CARTUPDATED", res))
-//     })
+function addToCart (userID, cartObj) {
+    console.log("cartObj", cartObj)
+    return userInfoDB.then(userInfoCollection => {
+        return userInfoCollection.updateOne(
+            {_id: ObjectId(userID)},
+            {$push: {cartItems: cartObj } }
+        )
+    }).then(res=>console.log("CARTUPDATED", res))
 }
+
 
 module.exports = {
     createListing,
