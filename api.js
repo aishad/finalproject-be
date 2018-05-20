@@ -291,6 +291,7 @@ app.post("/checkout", (req, res) => {
 
   app.get("/getCatItems", (req, res) => {
     let cat=req.query.cat;
+    console.log("cat",cat)
     //using the cat, go through listings database and get the corresponding items
     // let RESB=[
     // { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", img1: '/items/45589157_095_b.jpg', cat: "Spring" },
