@@ -29,14 +29,13 @@ app.post("/createListing", (req, res) => {
 
 app.post("/editListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-
+  console.log("itemID!!!!!!!!!!!!!!!!",reqb)
   mongo.editListing(reqb)
-  .then(itemID => {
-    if(itemID) {
-      return res.send(JSON.stringify({ success: true, itemID }));
+  .then(resb => {
+    if(resb) {
+      return res.send(JSON.stringify({ success: true }));
     }
-
-    res.send(JSON.stringify({ success: false }));
+    return res.send(JSON.stringify({ success: false }));
   });
 });
 

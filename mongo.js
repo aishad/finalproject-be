@@ -48,16 +48,13 @@ function createListing(listing) {
 }
 
 function editListing(listing) {
-    console.log('LISTING!!!!!!',listing)
+    // console.log('LISTING!!!!!!', listing)
     return listingsDB.then(listingsCollection => {
-        //return listingsCollection.insertOne(listing)
-        return listingsCollection.updateMany(
+        return listingsCollection.updateOne(
             {_id: ObjectId(listing.itemID)},
-            {$set: {...listing} }
+            {$set: { ...listing } }
         )
-        //.then(res => console.log(res))
-        // .then(res => res.upsertedId)
-        .then(res => res.upsertedId)
+        .then(res => res.modifiedCount)
         .catch(err => {
             console.log(err);
             return null;
@@ -170,7 +167,7 @@ function search(terms) {
 // }
 
 function getItemDetails(itemID) {
-    //console.log(itemID)
+    console.log(itemID)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({'_id': ObjectId(itemID)})
         .toArray()
