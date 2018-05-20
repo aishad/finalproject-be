@@ -54,7 +54,7 @@ app.post('/uploadPicItem', (req, res) => {
   var randomString = '' +  Math.floor(Math.random() * 10000000)
   var randomFilename = randomString + '.' + extension
   fs.writeFileSync('images/items/' +  randomFilename, req.body);
-  console.log("req",req)
+  //console.log("req",req)
   res.send("/items/"+randomFilename)
 })
 
@@ -107,7 +107,11 @@ app.get("/getItemDetails", (req, res)=>{
   let itemID = req.query.itemID;
   mongo.getItemDetails(itemID)
   .then(resB=>{
+<<<<<<< HEAD
+   // console.log("front", resB[0])
+=======
     //console.log("front", resB[0])
+>>>>>>> 1e305ce8afee5701c6e297e3b23a551e311d815f
     res.send(JSON.stringify(resB[0]))
   } )
 });
@@ -126,11 +130,11 @@ app.post("/getOrders", (req, res) => {
 app.post("/getSearchResults", (req, res)=>{
   let reqb= JSON.parse(req.body.toString());
 //  let reqb = {searchTerm: this.props.query}
-  console.log("getResults-2", reqb);
+  //console.log("getResults-2", reqb);
  
   let terms = reqb.query.split(' ');
   mongo.search(terms).then(RESB => {
-    console.log('res', RESB)
+//    console.log('res', RESB)
     res.send(JSON.stringify(RESB))
 
   })
@@ -180,7 +184,7 @@ app.post("/checkout", (req, res) => {
   //console.log('mongo', mongo)
   mongo.checkout(reqb)
   .then(RESB =>{
-    console.log("createtransaction", RESB[0])
+   // console.log("createtransaction", RESB[0])
     res.send(JSON.stringify(RESB[0]))
   })
 });
@@ -284,7 +288,11 @@ app.post("/checkout", (req, res) => {
       //   res.send(JSON.stringify(RESB));
       mongo.getRandomItems()
       .then(resB => {
+<<<<<<< HEAD
         //console.log("all2",resB)
+=======
+       // console.log("all2",resB)
+>>>>>>> ef1bb2fa8f8842a8e14ec4f6085cd62679a7a1d5
         res.send(JSON.stringify(resB))
       }
       )
@@ -316,7 +324,7 @@ app.post("/checkout", (req, res) => {
     // ]
     mongo.getArtistItems(artistName)
       .then(resB=> {
-        console.log("checkItems", resB)
+     //   console.log("checkItems", resB)
         res.send(JSON.stringify(resB))
       }
     )
@@ -362,42 +370,35 @@ app.post("/checkout", (req, res) => {
     //   aPassword: '123456',
     // }
     let reqb = JSON.parse(req.body.toString());
-    console.log("artistLogin",reqb)
- //   mongo.artistLogin(reqb)
-    res.send(JSON.stringify(RESB));
-    console.log(res)
+    mongo.artistLogin(reqb)
+    .then(RESB=>{
+      if (RESB){
+        return res.send(JSON.stringify({success:true, RESB}))
+      }
+      return res.send(JSON.stringify({success:false}))
+    })
+    .catch(err =>console.log(err))
   });
 
   app.post("/artistSignUp", (req, res) => {
-    // let reqb = {
-      // sName: 'jen',
-      // sEmail: 'jen@email.com',
-      // sPassword: '123456',
-      // sPasswordConf: '123456',
-      // sDescription: "I'm an artist",
-      // sLocation: 'Montreal, QC',
-      // sProfPicURL: 'image.jpg',
-      // sImageURL1: 'image1.jpg',
-      // sImageURL2: 'image2.jpg',
-      // sImageURL3: 'image3.jpg',
-    // }
     let reqb = JSON.parse(req.body.toString());
+
     let parsedReqb={
-         email: parsedReqb.sEmail,
-         artistName: parsedReqb.sName,
-         password: parsedReqb.sPassword,
-         confirmPassword: parsedReqb.sPasswordConf,
-         bio: parsedReqb.sDescription,
-         location: parsedReqb.sLocation,
-         profPicURL: parsedReqb.sProfPicURL,
-         imgURL1 : parsedReqb.sImageURL1,
-         imgURL2 : parsedReqb.sImageURL2,
-         imgURL3 : parsedReqb.sImageURL3
+         email: reqb.sEmail,
+         artistName: reqb.sName,
+         password: reqb.sPassword,
+         confirmPassword: reqb.sPasswordConf,
+         bio: reqb.sDescription,
+         location: reqb.sLocation,
+         profPicURL: reqb.sProfPicURL,
+         imgURL1 : reqb.sImageURL1,
+         imgURL2 : reqb.sImageURL2,
+         imgURL3 : reqb.sImageURL3
     }
     mongo.artistSignUp(parsedReqb)
     .then(RESB =>{
       if (RESB){
-        return res.send(JSON.stringify({success: true, email: parsedReqb.email, id: RESB}))
+        return res.send(JSON.stringify({success: true}))
       }
       return res.send(JSON.stringify({success: false}))
     })
