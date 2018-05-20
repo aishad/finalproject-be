@@ -84,7 +84,7 @@ function getRandomItems() {
         .toArray()
     })
     .then(res=>{
-        console.log("all",res)
+        //console.log("all",res)
         return res.slice(0,8);
     }).catch(err => {
         console.log(err);
@@ -306,20 +306,21 @@ function removeItem (tempCartDetails) {
         return userInfoCollection.updateOne(
             {_id: ObjectId(tempCartDetails.userID)},
             {$set: { cartItems : tempCartDetails.cartItems } }
-        ).then(res=>console.log("HELLO", res.ops))
+        )
+        .then(res => res.modifiedCount)
     })
 }
 
-function addToCart (cartObj) {
-    console.log("cartItem", cartObj)
-    // return userInfoDB.then(userInfoCollection => {
-    //     return userInfoCollection.updateOne(
-    //         {_id: ObjectId(cartObj.userID)},
-    //         {$set: {cartItems: cartItems.concat(cartObj.cartItems)}}
-    //     )
-        // ).then(res=>console.log("CARTUPDATED", res))
-//     })
+function addToCart (userID, cartObj) {
+    console.log("cartObj", cartObj)
+    return userInfoDB.then(userInfoCollection => {
+        return userInfoCollection.updateOne(
+            {_id: ObjectId(userID)},
+            {$push: {cartItems: cartObj } }
+        )
+    }).then(res=>console.log("CARTUPDATED", res))
 }
+
 
 module.exports = {
     createListing,

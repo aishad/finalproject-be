@@ -195,6 +195,10 @@ app.post("/checkout", (req, res) => {
     //   }
     //console.log("removeItem-2", reqb);
     mongo.removeItem(reqb)
+    .then(resB => {
+      if (resB) return res.send(JSON.stringify({success: true}));
+      return res.send(JSON.stringify({success: false}));
+    })
     // let RESB = {
     //     cartItems: [
     //       //deleted the cartItem in question. we only had one cartItem example in this case
@@ -209,31 +213,8 @@ app.post("/checkout", (req, res) => {
    // parsed contains name, blurb, description, id, etc.
     //   let quantity = parsed.quantity;
     // using the above info, add the item in question & its details to the user's list of cartitems
-    mongo.addToCart(reqb)
-    let RESB = {
-        id: "123",
-        firstName: "Jen",
-        lastName: "O",
-        email: "jen@email.com",
-        address: "123 Blah St.",
-        city: "Montreal",
-        province: "Quebec",
-        postalCode: "H13 1Y8",
-        country: "Canada",
-        cartItems: [
-            {
-              itemID: "123458",
-              name: "Pillow",
-              price: 100,
-              artistName: "caro",
-              imageURL: "items/pillow.jpg",
-              cat: "Popular",
-              quantity: 2,
-              quantityToBuy: 1
-            },]
-
-    }
-    res.send(RESB)
+    mongo.addToCart(reqb.userID, reqb.cartObj)
+    res.send(JSON.stringify({ success: true }))
 
   })
 
@@ -303,7 +284,7 @@ app.post("/checkout", (req, res) => {
       //   res.send(JSON.stringify(RESB));
       mongo.getRandomItems()
       .then(resB => {
-        console.log("all2",resB)
+        //console.log("all2",resB)
         res.send(JSON.stringify(resB))
       }
       )
