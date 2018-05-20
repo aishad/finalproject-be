@@ -48,7 +48,11 @@ function createListing(listing) {
 }
 
 function editListing(listing) {
+<<<<<<< HEAD
     // console.log('LISTING!!!!!!', listing)
+=======
+    //console.log('LISTING!!!!!!',listing)
+>>>>>>> 5c1059161218b1836e0023cd8b3c0193b1fd6fb1
     return listingsDB.then(listingsCollection => {
         return listingsCollection.updateOne(
             {_id: ObjectId(listing.itemID)},
@@ -81,7 +85,7 @@ function getRandomItems() {
         .toArray()
     })
     .then(res=>{
-        console.log("all",res)
+        //console.log("all",res)
         return res.slice(0,8);
     }).catch(err => {
         console.log(err);
@@ -95,7 +99,7 @@ function getArtistItems(artistName) {
         .toArray()
     })
     .then(res=>{
-        console.log(res)
+    //    console.log(res)
         return res;
     }).catch(err => {
         console.log(err);
@@ -200,7 +204,7 @@ function getCart(userID) {
 function getOrders(artistName){
     return transactionsDB.then(artistInfo =>{
         return artistInfo.find({
-            details:{
+            cartItems:{
                 $elemMatch: {artistName: 'aisha'}
             } 
         })
@@ -219,7 +223,6 @@ function addUser(signUpInfo) {
     return userInfoDB.then(userInfoCollection=>{
         return userInfoCollection.insertOne(signUpInfo)
         .then(res =>{
-        console.log("****THIS IS THE RES ID",res.insertedId);
         return res.insertedId;
         })
         .catch(
@@ -252,8 +255,49 @@ function userLogin(loginInfo){
         .catch(err =>console.log(err))
     })
 }
+
+function artistLogin(loginInfo){
+    //console.log(loginInfo.aPassword)
+
+    return artistInfoDB.then(artistInfoCollection =>{
+        return artistInfoCollection.find({
+            artistName : loginInfo.artistName,
+            password: loginInfo.aPassword
+        })
+        .toArray()
+        .then(res =>{
+            if (res.length>=1) return ({email: res[0].email, artistName: res[0].artistName})
+        })
+        .catch(err =>console.log(err))
+    })
+}
+
+function artistSignUp(signUpInfo) {
+    //(signUpInfo)
+    return artistInfoDB.then(artistInfoCollection =>{
+        return artistInfoCollection.findOne({ artistName: signUpInfo.artistName})
+        .then(res =>{
+            if (!res) return addArtist(signUpInfo)
+        })
+    })
+}
+function addArtist(signUpInfo) {
+    return artistInfoDB.then(artistInfoCollection =>{
+        return artistInfoCollection.insertOne(signUpInfo)
+        .then(res =>{
+       //     console.log("this is the res", res.insertedId)
+            return res
+        })
+        .catch(
+            err =>{
+                console.log(err)
+            }
+        )
+    })
+}
+
 function updateQuantity(item) {
-    console.log('item', item, item.itemID)
+   // console.log('item', item, item.itemID)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.updateOne(
             { _id : ObjectId(item.itemID) },
@@ -282,13 +326,14 @@ function createTransaction(transaction){
 function checkout (transaction) {
     return Promise.all([createTransaction(transaction), updateQuantities(transaction.cartItems)]);
 }
+
 function getCatItems(category) {
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({category})
         .toArray()
     })
     .then(res=>{
-        console.log(res)
+  //      console.log(res)
         return res;
     }).catch(err => {
         console.log(err);
@@ -296,6 +341,26 @@ function getCatItems(category) {
     })
 }
 
+function removeItem (tempCartDetails) {
+    //console.log(tempCartDetails)
+    return userInfoDB.then(userInfoCollection => {
+        return userInfoCollection.updateOne(
+            {_id: ObjectId(tempCartDetails.userID)},
+            {$set: { cartItems : tempCartDetails.cartItems } }
+        )
+        .then(res => res.modifiedCount)
+    })
+}
+
+function addToCart (userID, cartObj) {
+    console.log("cartObj", cartObj)
+    return userInfoDB.then(userInfoCollection => {
+        return userInfoCollection.updateOne(
+            {_id: ObjectId(userID)},
+            {$push: {cartItems: cartObj } }
+        )
+    }).then(res=>console.log("CARTUPDATED", res))
+}
 
 
 module.exports = {
@@ -317,4 +382,8 @@ module.exports = {
     getRandomItems,
     getCatItems,
     editListing,
+    artistSignUp,
+    artistLogin,
+    removeItem,
+    addToCart
 }
