@@ -375,8 +375,8 @@ app.post("/checkout", (req, res) => {
     let parsedReqb={
          email: reqb.sEmail,
          artistName: reqb.sName,
-         password: reqb.sPassword,
-         confirmPassword: reqb.sPasswordConf,
+        //  password: reqb.sPassword,
+        //  confirmPassword: reqb.sPasswordConf,
          bio: reqb.sDescription,
          location: reqb.sLocation,
          profPicURL: reqb.sProfPicURL,

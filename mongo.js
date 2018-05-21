@@ -260,7 +260,7 @@ function artistLogin(loginInfo){
         })
         .toArray()
         .then(res =>{
-            if (res.length>=1) return ({email: res[0].email, artistName: res[0].artistName})
+            if (res.length>=1) return ({email: res[0].email, artistName: res[0].artistName, artistID: res[0]._id})
         })
         .catch(err =>console.log(err))
     })
