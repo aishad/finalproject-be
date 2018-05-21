@@ -200,13 +200,12 @@ function getOrders(artistName){
     return transactionsDB.then(artistInfo =>{
         return artistInfo.find({
             cartItems:{
-                $elemMatch: {artistName: 'aisha'}
+                $elemMatch: {artistName: artistName}
             } 
         })
         .toArray()
     })
     .then(res =>{
-        console.log("RES on mongo", res)
         return res;
     }).catch(err =>{
         console.log(err);

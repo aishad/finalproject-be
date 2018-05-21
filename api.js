@@ -97,7 +97,7 @@ app.post("/getArtistProfile", (req, res) => {
   
   mongo.getArtistProfile(reqb)
   .then(RESB=>{ 
-  //  console.log("getArtistProfile-3", RESB)
+   // console.log("getArtistProfile-3", RESB)
    res.send(JSON.stringify(RESB));
   })
 });
@@ -113,12 +113,9 @@ app.get("/getItemDetails", (req, res)=>{
 
 app.post("/getOrders", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-  //let reqb = {artistName: this.props.artistName}
- // console.log("getOrders-2", reqb);
-  mongo.getOrders(reqb)
+  mongo.getOrders(reqb.artistName)
   .then(RESB=>{
- //   console.log("getOrders-3", RESB[0])
-    res.send(JSON.stringify(RESB[0]));
+    res.send(JSON.stringify(RESB));
   })
 });
 
