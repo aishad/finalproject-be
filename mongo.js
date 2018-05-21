@@ -76,6 +76,23 @@ function editArtistAccount(artistacct) {
     })
 }
 
+function editUserAccount(useracct) {
+    return userInfoDB.then(userInfoCollection  => {
+        // console.log("USERACCT",useracct.userID)
+        return userInfoCollection.updateOne(
+            {_id: ObjectId(useracct.userID)},
+            {$set: { ...useracct } }
+        )
+        .then(res => {res.modifiedCount
+        // console.log(res.modifiedCount)
+        })
+        .catch(err => {
+            console.log(err);
+            return null;
+        })
+    })
+}
+
 function getUserDetails(reqb) {
     //console.log("reqb", reqb)
     return userInfoDB.then(e=>
@@ -435,5 +452,6 @@ module.exports = {
     artistLogin,
     removeItem,
     addToCart,
-    editArtistAccount
+    editArtistAccount,
+    editUserAccount
 }

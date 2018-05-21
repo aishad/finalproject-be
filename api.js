@@ -50,6 +50,17 @@ app.post("/editArtistAccount", (req, res) => {
   });
 });
 
+app.post("/editUserAccount", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+  mongo.editUserAccount(reqb)
+  .then(resb => {
+    if(resb) {
+      return res.send(JSON.stringify({ success: true }));
+    }
+    return res.send(JSON.stringify({ success: false }));
+  });
+});
+
 //////////////////
 app.post('/uploadPicCat', (req, res) => {
   var extension = req.query.ext.split('.').pop();
