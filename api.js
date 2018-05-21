@@ -15,7 +15,7 @@ app.use(express.static('images'))
 
 app.post("/createListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-  //console.log("createListing-2",reqb)
+  console.log("createListing-2",reqb)
   mongo.createListing(reqb)
   .then(itemID => {
     if(itemID) {
