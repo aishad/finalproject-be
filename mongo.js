@@ -74,6 +74,14 @@ function getArtistProfile(artistName) {
     )
 }
 
+function getArtistAccount(artistID) {
+    return artistInfoDB.then(e=>
+        e.findOne({'_id': ObjectId(artistID)})
+    )
+}
+
+
+
 function getRandomItems() {
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find()
@@ -362,6 +370,7 @@ module.exports = {
     search,
     getUserDetails,
     getArtistProfile,
+    getArtistAccount,
     getItemDetails,
     getCart,
     getOrders,

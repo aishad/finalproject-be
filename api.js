@@ -102,6 +102,18 @@ app.post("/getArtistProfile", (req, res) => {
   })
 });
 
+app.post("/getArtistAccount", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+  let artistID = reqb.artistID;
+  console.log(reqb.artistID)
+  mongo.getArtistAccount(artistID)
+  .then(RESB=>{ 
+    console.log("HEYHEY", RESB)
+   // console.log("getArtistProfile-3", RESB)
+   res.send(JSON.stringify(RESB));
+  })
+});
+
 app.get("/getItemDetails", (req, res)=>{
   let itemID = req.query.itemID;
   mongo.getItemDetails(itemID)
