@@ -124,6 +124,21 @@ function getArtistAccountItems(artistID) {
     })
 }
 
+function getItemsBought(userID){
+    //console.log("USER ID",userID)
+    return  transactionsDB.then(transactionCollection =>{
+        return transactionCollection.find({userID})
+        .toArray()
+    })
+    .then(res =>{
+        //console.log("RES", res)
+        return res;
+    }).catch(err =>{
+        console.log(err)
+        return null
+    })
+}
+
 // function getArtistProfile(artistName){
 //     return artistInfoDB.then(artistInfo =>{
 //         return artistInfo.find({
@@ -188,7 +203,7 @@ function search(terms) {
 // }
 
 function getItemDetails(itemID) {
-    console.log(itemID)
+  //  console.log(itemID)
     return listingsDB.then(listingsCollection => {
         return listingsCollection.find({'_id': ObjectId(itemID)})
         .toArray()
@@ -389,6 +404,7 @@ module.exports = {
     getCart,
     getOrders,
     getArtistItems,
+    getItemsBought,
     userSignUp,
     userLogin,
     createTransaction,

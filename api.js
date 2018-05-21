@@ -113,11 +113,10 @@ app.post("/getArtistProfile", (req, res) => {
 app.post("/getArtistAccount", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
   let artistID = reqb.artistID;
-  console.log(reqb.artistID)
+ // console.log(reqb.artistID)
   mongo.getArtistAccount(artistID)
   .then(RESB=>{ 
-    //console.log("HEYHEY", RESB)
-   // console.log("getArtistProfile-3", RESB)
+
    res.send(JSON.stringify(RESB));
   })
 });
@@ -300,7 +299,7 @@ app.post("/checkout", (req, res) => {
 
   app.get("/getCatItems", (req, res) => {
     let cat=req.query.cat;
-    console.log("cat",cat)
+   // console.log("cat",cat)
     //using the cat, go through listings database and get the corresponding items
     // let RESB=[
     // { itemID: '123456', name: "Spring Print", price: 50, artistName: "aisha", img1: '/items/45589157_095_b.jpg', cat: "Spring" },
@@ -429,7 +428,13 @@ app.post("/checkout", (req, res) => {
     //     { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
     //  ]
     // }
-    res.send(JSON.stringify(RESB));
+    mongo.getItemsBought(userID)
+    .then(RESB =>{
+      if (RESB){
+   //     console.log("RESB" , RESB)
+        return res.send(JSON.stringify(RESB));
+      }
+    })
   })
 })
 app.listen(4000, () => console.log("Listening on port 4000!"));
