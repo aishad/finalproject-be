@@ -61,6 +61,21 @@ function editListing(listing) {
     })
 }
 
+function editArtistAccount(artistacct) {
+    return artistInfoDB.then(artistInfo  => {
+        // console.log("ARTISTACCT",artistacct)
+        return artistInfo.updateOne(
+            {_id: ObjectId(artistacct.artistID)},
+            {$set: { ...artistacct } }
+        )
+        .then(res => {res.modifiedCount})
+        .catch(err => {
+            console.log(err);
+            return null;
+        })
+    })
+}
+
 function getUserDetails(reqb) {
     //console.log("reqb", reqb)
     return userInfoDB.then(e=>
@@ -419,5 +434,6 @@ module.exports = {
     artistSignUp,
     artistLogin,
     removeItem,
-    addToCart
+    addToCart,
+    editArtistAccount
 }

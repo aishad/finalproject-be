@@ -29,8 +29,19 @@ app.post("/createListing", (req, res) => {
 
 app.post("/editListing", (req, res) => {
   let reqb = JSON.parse(req.body.toString());
-  console.log("itemID!!!!!!!!!!!!!!!!",reqb)
+  // console.log("itemID!!!!!!!!!!!!!!!!",reqb)
   mongo.editListing(reqb)
+  .then(resb => {
+    if(resb) {
+      return res.send(JSON.stringify({ success: true }));
+    }
+    return res.send(JSON.stringify({ success: false }));
+  });
+});
+
+app.post("/editArtistAccount", (req, res) => {
+  let reqb = JSON.parse(req.body.toString());
+  mongo.editArtistAccount(reqb)
   .then(resb => {
     if(resb) {
       return res.send(JSON.stringify({ success: true }));
