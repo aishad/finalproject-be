@@ -108,7 +108,7 @@ app.post("/getArtistAccount", (req, res) => {
   console.log(reqb.artistID)
   mongo.getArtistAccount(artistID)
   .then(RESB=>{ 
-    console.log("HEYHEY", RESB)
+    //console.log("HEYHEY", RESB)
    // console.log("getArtistProfile-3", RESB)
    res.send(JSON.stringify(RESB));
   })
@@ -226,14 +226,6 @@ app.post("/checkout", (req, res) => {
 
   })
 
-//   app.get("/getItemsBought", (req, res) => {
-//       let userID=req.query.userID;
-//       //get the itemsbought for this userID via transaction database
-//       let RESB = {itemsBought: ["123455", "123445"]}
-//       res.send(RESB)
-//   })
-
-
   app.get('/getRandomItems', (req, res)=>{
       //randomize items in the backend then send back those items
       // let RESB =
@@ -332,6 +324,18 @@ app.post("/checkout", (req, res) => {
     // res.send(JSON.stringify(RESB));
   })
 
+  app.get("/getArtistAccountItems", (req, res) => {
+    console.log("REQ",req.query.artistID)
+    let artistID=req.query.artistID;
+    mongo.getArtistAccountItems(artistID)
+      .then(resB=> {
+     //   console.log("checkItems", resB)
+        res.send(JSON.stringify(resB))
+      }
+    )
+    // res.send(JSON.stringify(RESB));
+  })
+
   app.post("/userLogin", (req, res) => {
     let reqb = JSON.parse(req.body.toString());
     mongo.userLogin(reqb)
@@ -411,12 +415,12 @@ app.post("/checkout", (req, res) => {
   app.get("/getItemsBought", (req, res) => {
     let userID=req.query.userID;
     //get the itemsbought for this userID via transaction database
-    let RESB = {
-      itemsBought: [ 
-        { itemID: '123457', name: "Awesome Embroidery", price: 100, artistName: "caro", imageURL: 'embroidery.jpg', cat: "Spring", blurb: "Best embroidery ever!", quantity: 1 },
-        { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
-     ]
-    }
+    // let RESB = {
+    //   itemsBought: [ 
+    //     { itemID: '123457', name: "Awesome Embroidery", price: 100, artistName: "caro", imageURL: 'embroidery.jpg', cat: "Spring", blurb: "Best embroidery ever!", quantity: 1 },
+    //     { itemID: '123458', name: "Pillow", price: 100, artistName: "caro", imageURL: 'pillow.jpg', cat: "Popular", blurb: "Check out my pillow", quantity: 1 },
+    //  ]
+    // }
     res.send(JSON.stringify(RESB));
   })
 })

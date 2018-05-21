@@ -109,6 +109,20 @@ function getArtistItems(artistName) {
         return null;
     })
 }
+function getArtistAccountItems(artistID) {
+   // console.log("FIRST",artistID)
+    return listingsDB.then(listingsCollection => {
+        return listingsCollection.find({artistID})
+        .toArray()
+    })
+    .then(res=>{
+       console.log("RES ",res)
+        return res;
+    }).catch(err => {
+        console.log(err);
+        return null;
+    })
+}
 
 // function getArtistProfile(artistName){
 //     return artistInfoDB.then(artistInfo =>{
@@ -380,6 +394,7 @@ module.exports = {
     createTransaction,
     checkout,
     getArtistItems,
+    getArtistAccountItems,
     updateQuantities,
     updateQuantity,
     getRandomItems,
