@@ -325,11 +325,11 @@ app.post("/checkout", (req, res) => {
   })
 
   app.get("/getArtistAccountItems", (req, res) => {
-    console.log("REQ",req.query.artistID)
+  // console.log("REQ",req.query.artistID)
     let artistID=req.query.artistID;
     mongo.getArtistAccountItems(artistID)
       .then(resB=> {
-     //   console.log("checkItems", resB)
+      //  console.log("artistItems", resB)
         res.send(JSON.stringify(resB))
       }
     )
