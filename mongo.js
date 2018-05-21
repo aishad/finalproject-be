@@ -116,7 +116,7 @@ function getArtistAccountItems(artistID) {
         .toArray()
     })
     .then(res=>{
-       console.log("RES ",res)
+   //    console.log("RES ",res[0])
         return res;
     }).catch(err => {
         console.log(err);

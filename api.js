@@ -77,9 +77,17 @@ app.post('/uploadSubmission', (req, res) => {
   var extension = req.query.ext.split('.').pop();
   var randomString = '' +  Math.floor(Math.random() * 10000000)
   var randomFilename = randomString + '.' + extension
-  fs.writeFileSync('images/submission/' +  randomFilename, req.body); //NEED TO CHANGE WHERE SUBMISSION PICS GO images/submissions/
-  res.send("success")
+  fs.writeFileSync('images/submission/' +  randomFilename, req.body); //NEED TO CHANGE WHERE PROFILE PICS GO images/artists/
+  res.send("/submission/"+randomFilename)
 })
+
+// app.post('/uploadSubmission', (req, res) => {
+//   var extension = req.query.ext.split('.').pop();
+//   var randomString = '' +  Math.floor(Math.random() * 10000000)
+//   var randomFilename = randomString + '.' + extension
+//   fs.writeFileSync('images/submission/' +  randomFilename, req.body); //NEED TO CHANGE WHERE SUBMISSION PICS GO images/submissions/
+//   res.send("images/submission/"+randomFilename)
+// })
 //////////////////
 
 
@@ -325,11 +333,11 @@ app.post("/checkout", (req, res) => {
   })
 
   app.get("/getArtistAccountItems", (req, res) => {
-    console.log("REQ",req.query.artistID)
+  // console.log("REQ",req.query.artistID)
     let artistID=req.query.artistID;
     mongo.getArtistAccountItems(artistID)
       .then(resB=> {
-     //   console.log("checkItems", resB)
+      //  console.log("artistItems", resB)
         res.send(JSON.stringify(resB))
       }
     )
