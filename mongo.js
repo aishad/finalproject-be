@@ -425,6 +425,39 @@ function addToCart (userID, cartObj) {
     }).then(res=>console.log("CARTUPDATED", res))
 }
 
+function saveToken (tokenInfo){
+    console.log("token Info", tokenInfo)
+    return artistInfoDB.then(artistInfoCollection =>{
+        return artistInfoCollection.updateOne(
+            {name : {token : tokenInfo. artistName}},
+            {$set: {token : tokentInfo.token}}
+            )
+    }).then(res=>console.log("Added token"))
+    //.then(getIgData(tokenInfo.token))
+}
+function checkToken(artistName){
+    return artistInfoDB.then(artistInfoCollection=>{
+        return artistInfoCollection.find({
+            artistName: artistName})
+    .toArray()
+    })
+    .then(res =>{
+        if (res.token) getIgData(res.token)
+        else return null
+    })
+    .catch(err =>console.log(err)
+    )}
+
+
+function getIgData (accessToken){
+    return fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token='+accessToken, {
+        method: 'GET'
+    }).then(res=>res.text())
+    .then(RESB =>{
+        return RESB
+
+    })
+}
 
 module.exports = {
     createListing,
@@ -453,5 +486,6 @@ module.exports = {
     removeItem,
     addToCart,
     editArtistAccount,
-    editUserAccount
+    editUserAccount,
+    saveToken
 }
