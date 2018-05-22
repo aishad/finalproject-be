@@ -8,8 +8,7 @@ var ObjectId = require('mongodb').ObjectId;
 const mongo = require('./mongo.js')
 
 var connect = MongoClient.connect(uri,(err,client)=>{
-//app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
-app.use(bodyParser.json())
+app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
 
 app.use(express.static('images'))
 
@@ -458,13 +457,10 @@ app.post("/checkout", (req, res) => {
       }
     })
   })
-})
+
 
 app.post("/saveToken", (req, res) =>{
  // console.log("req",req.body)
- console.log("HEY");
- console.log(req.body);
- console.log("THERE");
  let reqb = JSON.parse(req.body.toString());
  console.log("reqb", reqb)
  // let splitToken = reqb.token.split("=")
@@ -487,5 +483,6 @@ app.post("/checkToken", (req, res) =>{
 
   })
 
+})
 })
 app.listen(4000, () => console.log("Listening on port 4000!"));
