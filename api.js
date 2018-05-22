@@ -8,8 +8,8 @@ var ObjectId = require('mongodb').ObjectId;
 const mongo = require('./mongo.js')
 
 var connect = MongoClient.connect(uri,(err,client)=>{
-
-app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
+//app.use(bodyParser.raw({ type: "*/*", limit: "50mb" }));
+app.use(bodyParser.json())
 
 app.use(express.static('images'))
 
@@ -461,18 +461,30 @@ app.post("/checkout", (req, res) => {
 })
 
 app.post("/saveToken", (req, res) =>{
-  let reqb = JSON.parse(req.body.toString())
+ // console.log("req",req.body)
+ console.log("HEY");
+ console.log(req.body);
+ console.log("THERE");
+ let reqb = JSON.parse(req.body.toString());
+ console.log("reqb", reqb)
+ // let splitToken = reqb.token.split("=")
+ // console.log("splitToken", splitToken)
   let parsedReqb = {
-    artistName : reqb.artistName,
+    aristID : reqb.artistID,
     accessToken : reqb.token 
   }
+ // console.log("parsed", parsedReqb)
   mongo.saveToken(parsedReqb)
+  .then(resB =>{
+    console.log("Added")
+    res.send(JSON.stringify({success:true}))
+  })
 })
 
 app.post("/checkToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
   mongo.checkToken(reqb).then(resb => {
-    
+
   })
 
 })
