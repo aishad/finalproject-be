@@ -458,12 +458,12 @@ app.post("/checkout", (req, res) => {
       }
     })
   })
-})
+
 
 app.post("/saveToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
   let parsedReqb = {
-    artistName : reqb.artistName,
+    artistID : reqb.artistID,
     accessToken : reqb.token 
   }
   mongo.saveToken(parsedReqb)
@@ -475,5 +475,6 @@ app.post("/checkToken", (req, res) =>{
     
   })
 
+})
 })
 app.listen(4000, () => console.log("Listening on port 4000!"));
