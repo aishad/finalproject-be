@@ -426,14 +426,14 @@ function addToCart (userID, cartObj) {
 }
 
 function saveToken (tokenInfo){
-    console.log(tokenInfo)
+    console.log("token Info", tokenInfo.accessToken)
     return artistInfoDB.then(artistInfoCollection =>{
         return artistInfoCollection.updateOne(
-            {name : {token : tokenInfo. artistName}},
-            {$set: {token : tokentInfo.token}}
+            {_id : ObjectId(tokenInfo.artistID)},
+            {$set: {token : tokenInfo.accessToken}}
             )
     }).then(res=>console.log("Added token"))
-    .then(getIgData(tokenInfo.token))
+    //.then(getIgData(tokenInfo.token))
 }
 function checkToken(artistName){
     return artistInfoDB.then(artistInfoCollection=>{
@@ -455,7 +455,7 @@ function getIgData (accessToken){
     }).then(res=>res.text())
     .then(RESB =>{
         return RESB
-        
+
     })
 }
 
