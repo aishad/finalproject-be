@@ -5,7 +5,9 @@ const fs = require("fs");
 var MongoClient = require("mongodb").MongoClient;
 var uri = "mongodb+srv://jen:111@cluster0-wjok0.mongodb.net/admin";
 var ObjectId = require("mongodb").ObjectId;
-const fetch = require('node-fetch');// var connect = MongoClient.connect(uri,(err,client)=>{
+const fetch = require('node-fetch');
+
+// var connect = MongoClient.connect(uri,(err,client)=>{
 //     client.db("all").collection("artistInfo")
 
 // connect.find({'artistName' : "caro"})
@@ -431,8 +433,13 @@ function saveToken (tokenInfo){
             { _id : ObjectId(tokenInfo.artistID) },
             {$set: { token : tokenInfo.accessToken}}
             )
+    }).then(res=>{
+    //    console.log("Added token");
+    //    console.log("RESSSSS", res);
+        return res;
     })
-    .then(res=>console.log("Added token"))
+    .catch(err=>console.log(err))
+    //.then(getIgData(tokenInfo.token))
 }
 
 function checkToken(artistName){
@@ -443,8 +450,9 @@ function checkToken(artistName){
     .toArray()
     })
     .then(res =>{
-        if (res[0].token) {
-        return  getIgData(res[0].token) }
+   //     console.log("HI", res)
+        let resB=res[0]
+        if (resB.token) {return getIgData(resB.token)}
         else return null
     })
     .catch(err =>console.log(err)

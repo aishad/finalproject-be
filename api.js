@@ -491,7 +491,6 @@ app.post("/checkArtistToken", (req, res) =>{
   .then(resb => {
 res.send(resb)
   })
-
 })
 })
 app.listen(4000, () => console.log("Listening on port 4000!"));
