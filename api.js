@@ -466,7 +466,7 @@ app.post("/saveToken", (req, res) =>{
  // let splitToken = reqb.token.split("=")
  // console.log("splitToken", splitToken)
   let parsedReqb = {
-    aristID : reqb.artistID,
+    artistID : reqb.artistID,
     accessToken : reqb.token 
   }
  // console.log("parsed", parsedReqb)
@@ -480,9 +480,9 @@ app.post("/saveToken", (req, res) =>{
 app.post("/checkToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
   mongo.checkToken(reqb).then(resb => {
-
+    console.log("IG DATA", resb)
+    res.send(resb)
   })
-
 })
 })
 app.listen(4000, () => console.log("Listening on port 4000!"));
