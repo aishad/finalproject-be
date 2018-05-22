@@ -121,7 +121,7 @@ function getRandomItems() {
     })
     .then(res=>{
         //console.log("all",res)
-        return res.slice(0,8);
+        return res.slice(0,12);
     }).catch(err => {
         console.log(err);
         return null;
