@@ -5,8 +5,7 @@ const fs = require("fs");
 var MongoClient = require("mongodb").MongoClient;
 var uri = "mongodb+srv://jen:111@cluster0-wjok0.mongodb.net/admin";
 var ObjectId = require("mongodb").ObjectId;
-
-// var connect = MongoClient.connect(uri,(err,client)=>{
+const fetch = require('node-fetch');// var connect = MongoClient.connect(uri,(err,client)=>{
 //     client.db("all").collection("artistInfo")
 
 // connect.find({'artistName' : "caro"})
@@ -426,36 +425,56 @@ function addToCart (userID, cartObj) {
 }
 
 function saveToken (tokenInfo){
-    console.log("token Info", tokenInfo.accessToken)
+   console.log("token Info", tokenInfo)
     return artistInfoDB.then(artistInfoCollection =>{
         return artistInfoCollection.updateOne(
-            {_id : ObjectId(tokenInfo.artistID)},
-            {$set: {token : tokenInfo.accessToken}}
+            { _id : ObjectId(tokenInfo.artistID) },
+            {$set: { token : tokenInfo.accessToken}}
             )
-    }).then(res=>console.log("Added token"))
-    //.then(getIgData(tokenInfo.token))
+    })
+    .then(res=>console.log("Added token"))
 }
+
 function checkToken(artistName){
+  //  console.log(artistName)
     return artistInfoDB.then(artistInfoCollection=>{
         return artistInfoCollection.find({
-            artistName: artistName})
+            artistName: artistName.artistName})
     .toArray()
     })
     .then(res =>{
-        if (res.token) getIgData(res.token)
+        if (res[0].token) {
+        return  getIgData(res[0].token) }
         else return null
     })
     .catch(err =>console.log(err)
     )}
 
+    function checkArtistToken(artistID){
+     //   console.log(artistName)
+        return artistInfoDB.then(artistInfoCollection=>{
+            return artistInfoCollection.find({
+                '_id': ObjectId(artistID.artistID)})
+        .toArray()
+        })
+        .then(res =>{
+            if (res[0].token) {
+            return  getIgData(res[0].token) }
+            else return null
+        })
+        .catch(err =>console.log(err)
+        )}
+    
+
 
 function getIgData (accessToken){
+    console.log("im getting IG data")
     return fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token='+accessToken, {
         method: 'GET'
     }).then(res=>res.text())
     .then(RESB =>{
+      //  console.log(RESB)
         return RESB
-
     })
 }
 
@@ -487,5 +506,7 @@ module.exports = {
     addToCart,
     editArtistAccount,
     editUserAccount,
-    saveToken
+    saveToken, 
+    checkToken,
+    checkArtistToken
 }

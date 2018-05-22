@@ -466,7 +466,7 @@ app.post("/saveToken", (req, res) =>{
  // let splitToken = reqb.token.split("=")
  // console.log("splitToken", splitToken)
   let parsedReqb = {
-    aristID : reqb.artistID,
+    artistID : reqb.artistID,
     accessToken : reqb.token 
   }
  // console.log("parsed", parsedReqb)
@@ -479,8 +479,17 @@ app.post("/saveToken", (req, res) =>{
 
 app.post("/checkToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
-  mongo.checkToken(reqb).then(resb => {
+  mongo.checkToken(reqb)
+  .then(resb => {
+res.send(resb)
+  })
 
+})
+app.post("/checkArtistToken", (req, res) =>{
+  let reqb = JSON.parse(req.body.toString())
+  mongo.checkToken(reqb)
+  .then(resb => {
+res.send(resb)
   })
 
 })
