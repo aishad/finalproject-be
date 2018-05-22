@@ -481,15 +481,15 @@ app.post("/checkToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
   mongo.checkToken(reqb)
   .then(resb => {
-res.send(resb)
+    res.send(resb)
   })
 
 })
 app.post("/checkArtistToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
-  mongo.checkToken(reqb)
+  mongo.checkArtistToken(reqb)
   .then(resb => {
-res.send(resb)
+    res.send(resb)
   })
 })
 })

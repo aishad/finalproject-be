@@ -459,13 +459,13 @@ function checkToken(artistName){
     )}
 
     function checkArtistToken(artistID){
-     //   console.log(artistName)
         return artistInfoDB.then(artistInfoCollection=>{
             return artistInfoCollection.find({
                 '_id': ObjectId(artistID.artistID)})
         .toArray()
         })
         .then(res =>{
+            console.log("WHATS UP", res)
             if (res[0].token) {
             return  getIgData(res[0].token) }
             else return null
