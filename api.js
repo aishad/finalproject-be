@@ -383,7 +383,8 @@ app.post("/checkout", (req, res) => {
       firstName: reqb.firstName,
       lastName: reqb.lastName,
       password: reqb.passwordSignUp,
-      confirmPassword: reqb.passwordSignUpConf
+      confirmPassword: reqb.passwordSignUpConf,
+      cartItems: []
     };
     mongo.userSignUp(parsedReqb)
     .then(RESB => {
