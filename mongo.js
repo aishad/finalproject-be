@@ -427,19 +427,15 @@ function addToCart (userID, cartObj) {
 }
 
 function saveToken (tokenInfo){
-   console.log("token Info", tokenInfo)
     return artistInfoDB.then(artistInfoCollection =>{
         return artistInfoCollection.updateOne(
             { _id : ObjectId(tokenInfo.artistID) },
             {$set: { token : tokenInfo.accessToken}}
             )
     }).then(res=>{
-    //    console.log("Added token");
-    //    console.log("RESSSSS", res);
         return res;
     })
     .catch(err=>console.log(err))
-    //.then(getIgData(tokenInfo.token))
 }
 
 function checkToken(artistName){
@@ -450,25 +446,23 @@ function checkToken(artistName){
     .toArray()
     })
     .then(res =>{
-   //     console.log("HI", res)
         let resB=res[0]
         if (resB.token) {return getIgData(resB.token)}
-        else return null
+        else return ({success :false})
     })
     .catch(err =>console.log(err)
     )}
 
     function checkArtistToken(artistID){
-     //   console.log(artistName)
         return artistInfoDB.then(artistInfoCollection=>{
             return artistInfoCollection.find({
                 '_id': ObjectId(artistID.artistID)})
         .toArray()
         })
         .then(res =>{
-            if (res[0].token) {
-            return  getIgData(res[0].token) }
-            else return null
+            let resB=res[0]
+            if (resB.token) {return  getIgData(resB.token) }
+            else return ({success: false})
         })
         .catch(err =>console.log(err)
         )}
@@ -476,13 +470,12 @@ function checkToken(artistName){
 
 
 function getIgData (accessToken){
-    console.log("im getting IG data")
     return fetch('https://api.instagram.com/v1/users/self/media/recent/?access_token='+accessToken, {
         method: 'GET'
     }).then(res=>res.text())
     .then(RESB =>{
       //  console.log(RESB)
-        return RESB
+        return ({success:true, RESB})
     })
 }
 
