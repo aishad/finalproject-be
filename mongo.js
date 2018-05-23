@@ -121,8 +121,11 @@ function getRandomItems() {
         .toArray()
     })
     .then(res=>{
+        let shuffled = res.sort(()=>.5-Math.random())
+        let selected = shuffled.slice(0,12) 
+        return selected
         //console.log("all",res)
-        return res.slice(0,12);
+       // return res.slice(0,12);
     }).catch(err => {
         console.log(err);
         return null;
