@@ -387,8 +387,17 @@ function createTransaction(transaction){
 })
 }
 
+function clearCartItems(userID) {
+    return userInfoDB.then(userInfoCollection=> {
+        return userInfoCollection.updateOne(
+            {_id: ObjectId(userID)},
+            {$set: { cartItems : [] } }
+        )
+        })
+}
+
 function checkout (transaction) {
-    return Promise.all([createTransaction(transaction), updateQuantities(transaction.cartItems)]);
+    return Promise.all([createTransaction(transaction), updateQuantities(transaction.cartItems), clearCartItems(transaction.userID)]);
 }
 
 function getCatItems(category) {
