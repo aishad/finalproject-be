@@ -460,19 +460,13 @@ app.post("/checkout", (req, res) => {
 
 
 app.post("/saveToken", (req, res) =>{
- // console.log("req",req.body)
  let reqb = JSON.parse(req.body.toString());
- console.log("reqb", reqb)
- // let splitToken = reqb.token.split("=")
- // console.log("splitToken", splitToken)
   let parsedReqb = {
     artistID : reqb.artistID,
     accessToken : reqb.token 
   }
- // console.log("parsed", parsedReqb)
   mongo.saveToken(parsedReqb)
   .then(resB =>{
-    console.log("Added")
     res.send(JSON.stringify({success:true}))
   })
 })
@@ -481,15 +475,16 @@ app.post("/checkToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
   mongo.checkToken(reqb)
   .then(resb => {
-    res.send(resb)
+    res.send(JSON.stringify(resb))
   })
 
 })
 app.post("/checkArtistToken", (req, res) =>{
   let reqb = JSON.parse(req.body.toString())
+  //console.log("reqb",reqb)
   mongo.checkArtistToken(reqb)
   .then(resb => {
-    res.send(resb)
+res.send(JSON.stringify(resb))
   })
 })
 })
